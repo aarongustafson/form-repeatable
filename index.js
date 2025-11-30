@@ -1,2 +1,2 @@
-export { ComponentNameElement } from './COMPONENT-NAME.js';
+export { FormRepeatableElement } from './form-repeatable.js';
 import './define.js';

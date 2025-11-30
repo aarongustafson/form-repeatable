@@ -1,195 +1,122 @@
-# Web Component Starter Template
+# form-repeatable Web Component
 
-A comprehensive, production-ready starter template for creating Web Components. This template is based on the architecture and best practices from [form-obfuscator](https://github.com/aarongustafson/form-obfuscator).
+[![npm version](https://img.shields.io/npm/v/@aarongustafson/form-repeatable.svg)](https://www.npmjs.com/package/@aarongustafson/form-repeatable) [![Build Status](https://img.shields.io/github/actions/workflow/status/aarongustafson/form-repeatable/ci.yml?branch=main)](https://github.com/aarongustafson/form-repeatable/actions)
 
-## ✨ Features
+A web component that enables you to control the duplication of fields.
 
-- **Modern Tooling**: Vitest, ESLint, Prettier, Happy DOM
-- **Best Practices**: Shadow DOM, Custom Elements v1, proper encapsulation
-- **Multiple Import Options**: Auto-define, manual definition, or both
-- **Testing**: Comprehensive test setup with coverage reporting
-- **CI/CD**: GitHub Actions workflows included
-- **Developer Experience**: Demo page, interactive setup, extensive documentation
-- **Publishing Ready**: npm package configuration and automated publishing workflow
+## Demo
 
-## 🚀 Quick Start
+[Live Demo](https://aarongustafson.github.io/form-repeatable/demo/) ([Source](./demo/index.html))
 
-### Use This Template
-
-1. Click "Use this template" on GitHub, or:
+## Installation
 
 ```bash
-git clone https://github.com/aarongustafson/web-component-starter.git my-component
-cd my-component
+npm install @aarongustafson/form-repeatable
 ```
 
-2. Run the interactive setup:
+## Usage
 
-```bash
-npm install
-npm run setup
-```
+### Option 1: Auto-define the custom element (easiest)
 
-The setup wizard will:
-- Ask for your component name (e.g., `my-awesome-component`)
-- Ask for a description
-- Rename all files automatically
-- Replace all placeholders in code and configuration
-- **Generate your component's README from template**
-- **Clean up template setup files** (SETUP.md, README.tpl, scripts/)
-- Install dependencies
-- Initialize git repository
+Import the package to automatically define the `<form-repeatable>` custom element:
 
-### Manual Setup
-
-If you prefer manual setup, see [SETUP.md](SETUP.md) for detailed instructions.
-
-## 📁 What's Included
-
-```
-web-component-starter/
-├── COMPONENT-NAME.js          # Component implementation
-├── index.js                   # Main entry (class + auto-define)
-├── define.js                  # Auto-define only
-├── custom-elements.json       # Custom Elements Manifest
-├── package.json               # Package config with scripts
-├── LICENSE                    # MIT License
-├── README.md                  # This file (replaced after setup)
-├── README.tpl                 # Template for your component's README
-├── .gitignore                 # Git ignore
-├── .npmignore                 # npm ignore
-├── .prettierrc                # Prettier config
-├── .editorconfig              # Editor config
-├── eslint.config.js           # ESLint config
-├── vitest.config.js           # Vitest config
-├── .github/
-│   ├── workflows/
-│   │   ├── ci.yml            # Continuous integration
-│   │   └── publish.yml       # Auto-publish to npm
-│   └── ISSUE_TEMPLATE/       # Bug & feature templates
-├── scripts/
-│   └── setup.js              # Interactive setup wizard (removed after setup)
-├── test/
-│   ├── setup.js              # Test configuration
-│   └── COMPONENT-NAME.test.js # Test suite
-├── demo/
-│   └── index.html            # Live demo page
-├── SETUP.md                  # Manual setup guide (removed after setup)
-└── CONTRIBUTING.md           # Contribution guidelines
-```
-
-## 🛠️ Development
-
-### Available Scripts
-
-```bash
-npm run setup          # Interactive setup wizard
-npm test               # Run tests in watch mode
-npm run test:run       # Run tests once
-npm run test:ui        # Open Vitest UI
-npm run test:coverage  # Generate coverage report
-npm run lint           # Lint with ESLint + Prettier
-npm run format         # Auto-fix linting issues
-```
-
-### Component Architecture
-
-This template provides three flexible import options:
-
-**Option 1: Auto-define (easiest)**
 ```javascript
-import '@yourscope/component-name';
-// Element is automatically registered
+import '@aarongustafson/form-repeatable';
 ```
 
-**Option 2: Manual registration**
-```javascript
-import { ComponentNameElement } from '@yourscope/component-name/component-name.js';
-customElements.define('my-custom-name', ComponentNameElement);
+Or use the define-only script in HTML:
+
+```html
+<script src="./node_modules/@aarongustafson/form-repeatable/define.js" type="module"></script>
 ```
 
-**Option 3: Both**
+### Option 2: Import the class and define manually
+
+Import the class and define the custom element with your preferred tag name:
+
 ```javascript
-import { ComponentNameElement } from '@yourscope/component-name';
-// Element is registered AND class is available for extension
+import { FormRepeatableElement } from '@aarongustafson/form-repeatable/form-repeatable.js';
+
+customElements.define('my-custom-name', FormRepeatableElement);
 ```
 
-## 🧪 Testing
+### Basic Example
 
-Includes:
-- **Vitest**: Fast, modern test runner
-- **Happy DOM**: Lightweight browser environment
-- **Testing Library**: DOM testing utilities
-- **Coverage**: V8 coverage reporting
-- **UI**: Interactive test debugging
+```html
+<form-repeatable>
+  <!-- Your content here -->
+</form-repeatable>
+```
 
-Example:
+## Attributes
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `example-attribute` | `string` | `""` | Description of the attribute |
+
+## Events
+
+The component fires custom events that you can listen to:
+
+| Event | Description | Detail |
+|-------|-------------|--------|
+| `form-repeatable:event` | Fired when something happens | `{ data }` |
+
+### Example Event Handling
+
 ```javascript
-import { describe, it, expect } from 'vitest';
+const element = document.querySelector('form-repeatable');
 
-describe('MyComponent', () => {
-  it('should render', () => {
-    const el = document.createElement('my-component');
-    expect(el).toBeInstanceOf(HTMLElement);
-  });
+element.addEventListener('form-repeatable:event', (event) => {
+  console.log('Event fired:', event.detail);
 });
 ```
 
-## 📦 Publishing
+## CSS Custom Properties
 
-### Setup npm Publishing
+| Property | Default | Description |
+|----------|---------|-------------|
+| `--example-color` | `#000` | Example color property |
 
-1. Add `NPM_TOKEN` to GitHub repository secrets
-2. Update version in `package.json`
-3. Create a GitHub release
-4. Automated workflow publishes to npm
+### Example Styling
 
-### Manual Publishing
-
-```bash
-npm run test:run  # Ensure tests pass
-npm run lint      # Ensure code is clean
-npm publish       # Publish to npm
+```css
+form-repeatable {
+  --example-color: #ff0000;
+}
 ```
 
-## 🌐 Browser Support
+## Browser Support
 
-Works in all modern browsers supporting:
+This component uses modern web standards:
 - Custom Elements v1
 - Shadow DOM v1
 - ES Modules
 
-For legacy browsers, use polyfills.
+For older browsers, you may need polyfills.
 
-## 📚 Documentation
+## Development
 
-- [SETUP.md](SETUP.md) - Detailed setup instructions (removed after setup)
-- [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
-- [LICENSE](LICENSE) - MIT License
+```bash
+# Install dependencies
+npm install
 
-## 🎯 Use Cases
+# Run tests
+npm test
 
-Perfect for:
-- Reusable UI components
-- Design system elements
-- Form controls and widgets
-- Interactive content blocks
-- Accessibility-enhanced components
+# Run tests with coverage
+npm run test:coverage
 
-## 🙏 Credits
+# Lint code
+npm run lint
 
-Based on best practices from:
-- [form-obfuscator](https://github.com/aarongustafson/form-obfuscator) by Aaron Gustafson
-- [Open Web Components](https://open-wc.org/)
+# Format code
+npm run format
 
-## 📄 License
+# View demo
+open demo/index.html
+```
 
-MIT - See [LICENSE](LICENSE)
+## License
 
-## 🤝 Contributing
-
-Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md)
-
----
-
-**Ready to build your web component?** Run `npm run setup` to get started! 🚀
+MIT © [Aaron Gustafson](https://www.aaron-gustafson.com/)

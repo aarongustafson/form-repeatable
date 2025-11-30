@@ -1,3 +1,3 @@
-import { ComponentNameElement } from './COMPONENT-NAME.js';
+import { FormRepeatableElement } from './form-repeatable.js';
 
-customElements.define('COMPONENT-NAME', ComponentNameElement);
+customElements.define('form-repeatable', FormRepeatableElement);

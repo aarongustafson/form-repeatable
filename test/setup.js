@@ -1,12 +1,12 @@
 import { beforeAll } from 'vitest';
-import { ComponentNameElement } from '../COMPONENT-NAME.js';
+import { FormRepeatableElement } from '../form-repeatable.js';
 
 // Define the custom element before tests run
 beforeAll(() => {
-	if (!customElements.get('COMPONENT-NAME')) {
-		customElements.define('COMPONENT-NAME', ComponentNameElement);
+	if (!customElements.get('form-repeatable')) {
+		customElements.define('form-repeatable', FormRepeatableElement);
 	}
 
 	// Make the class available globally for testing static methods
-	globalThis.ComponentNameElement = ComponentNameElement;
+	globalThis.FormRepeatableElement = FormRepeatableElement;
 });

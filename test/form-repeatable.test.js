@@ -1,20 +1,20 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { ComponentNameElement } from '../COMPONENT-NAME.js';
+import { FormRepeatableElement } from '../form-repeatable.js';
 
-describe('ComponentNameElement', () => {
+describe('FormRepeatableElement', () => {
 	let element;
 
 	beforeEach(() => {
-		element = document.createElement('COMPONENT-NAME');
+		element = document.createElement('form-repeatable');
 		document.body.appendChild(element);
 	});
 
 	it('should be defined', () => {
-		expect(customElements.get('COMPONENT-NAME')).toBe(ComponentNameElement);
+		expect(customElements.get('form-repeatable')).toBe(FormRepeatableElement);
 	});
 
 	it('should create an instance', () => {
-		expect(element).toBeInstanceOf(ComponentNameElement);
+		expect(element).toBeInstanceOf(FormRepeatableElement);
 		expect(element).toBeInstanceOf(HTMLElement);
 	});
 

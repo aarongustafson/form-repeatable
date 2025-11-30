@@ -1,17 +1,17 @@
 /**
- * ComponentNameElement - COMPONENT_DESCRIPTION
+ * FormRepeatableElement - A web component that enables you to control the duplication of fields.
  *
- * @element COMPONENT-NAME
+ * @element form-repeatable
  *
  * @attr {string} example-attribute - Description of the attribute
  *
- * @fires COMPONENT-NAME:event-name - Description of the event
+ * @fires form-repeatable:event-name - Description of the event
  *
  * @slot - Default slot for content
  *
  * @cssprop --component-name-color - Description of CSS custom property
  */
-export class ComponentNameElement extends HTMLElement {
+export class FormRepeatableElement extends HTMLElement {
 	static get observedAttributes() {
 		return ['example-attribute'];
 	}
