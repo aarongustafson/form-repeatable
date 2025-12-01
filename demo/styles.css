@@ -201,7 +201,7 @@ label:has(+ textarea) {
 }
 
 fieldset {
-	margin-block: 1rem;
+	margin-block: 1rem 0;
 	border: 0;
 	padding: 0;
 }

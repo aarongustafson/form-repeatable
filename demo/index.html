@@ -68,7 +68,9 @@
 			<h1>&lt;form-repeatable&gt;</h1>
 			<p>
 				A web component that enables you to control the duplication of
-				fields. Ported from the jQuery Repeatable Fields plugin. See the
+				fields with native form participation using ElementInternals.
+				Single-instance architecture manages all groups internally. See
+				the
 				<a
 					href="https://github.com/aarongustafson/form-repeatable/blob/main/README.md"
 					>README</a
@@ -82,23 +84,26 @@
 			<section>
 				<h2>Basic Example</h2>
 				<p>
-					A simple demonstration of repeatable fields with automatic
+					A simple demonstration of repeatable fields. The first child
+					element becomes the template automatically, with automatic
 					ID and label incrementing.
 				</p>
 
 				<div class="demo-section">
 					<h3>Travel Stops</h3>
 					<p>
-						Add multiple stops to your journey. Click "Add Another"
-						to duplicate the field.
+						Add multiple stops to your journey. The component
+						manages all groups internally in its shadow DOM.
 					</p>
 					<div class="code-demo-pair">
 						<pre><code>&lt;form&gt;
   &lt;form-repeatable&gt;
-    &lt;label for="stop-1"&gt;Stop 1&lt;/label&gt;
-    &lt;input id="stop-1" type="text"
-           name="stops[]"
-           placeholder="Enter location"&gt;
+    &lt;div&gt;
+      &lt;label for="stop-1"&gt;Stop 1&lt;/label&gt;
+      &lt;input id="stop-1" type="text"
+             name="stops[]"
+             placeholder="Enter location"&gt;
+    &lt;/div&gt;
   &lt;/form-repeatable&gt;
 &lt;/form&gt;</code></pre>
 						<div class="demo">
@@ -106,13 +111,15 @@
 								<fieldset>
 									<legend>Trip Information</legend>
 									<form-repeatable>
-										<label for="stop-1">Stop 1</label>
-										<input
-											id="stop-1"
-											type="text"
-											name="stops[]"
-											placeholder="Enter location"
-										/>
+										<div>
+											<label for="stop-1">Stop 1</label>
+											<input
+												id="stop-1"
+												type="text"
+												name="stops[]"
+												placeholder="Enter location"
+											/>
+										</div>
 									</form-repeatable>
 								</fieldset>
 								<button type="submit">Submit</button>
@@ -125,65 +132,71 @@
 
 			<!-- Pre-populated Removable Fields -->
 			<section>
-				<h2>Pre-populated Fields</h2>
-				<p>Demonstrating pre-populated values with removable fields.</p>
+				<h2>Pre-populated Fields (Progressive Enhancement)</h2>
+				<p>
+					Server-rendered initial groups are preserved. Each group
+					becomes part of the shadow DOM.
+				</p>
 
 				<div class="demo-section">
 					<h3>Contact Information</h3>
 					<p>
-						Existing contacts can be removed, and new ones can be
-						added.
+						Multiple initial groups with values. The component
+						recognizes them all and allows adding/removing.
 					</p>
 					<div class="code-demo-pair">
-						<pre><code><mark>&lt;form-repeatable removable&gt;</mark>
-  &lt;label for="phone-1"&gt;Phone 1&lt;/label&gt;
-  &lt;input id="phone-1" type="tel"
-         name="phones[]"
-         value="555-0100"&gt;
-<mark>&lt;/form-repeatable&gt;</mark>
-
-<mark>&lt;form-repeatable removable&gt;</mark>
-  &lt;label for="phone-2"&gt;Phone 2&lt;/label&gt;
-  &lt;input id="phone-2" type="tel"
-         name="phones[]"
-         value="555-0101"&gt;
-<mark>&lt;/form-repeatable&gt;</mark>
-
-&lt;form-repeatable&gt;
-  &lt;label for="phone-3"&gt;Phone 3&lt;/label&gt;
-  &lt;input id="phone-3" type="tel"
-         name="phones[]"&gt;
+						<pre><code>&lt;form-repeatable&gt;
+  &lt;div&gt;
+    &lt;label for="phone-1"&gt;Phone 1&lt;/label&gt;
+    &lt;input id="phone-1" type="tel"
+           name="phones[]"
+           value="555-0100"&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;label for="phone-2"&gt;Phone 2&lt;/label&gt;
+    &lt;input id="phone-2" type="tel"
+           name="phones[]"
+           value="555-0101"&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;label for="phone-3"&gt;Phone 3&lt;/label&gt;
+    &lt;input id="phone-3" type="tel"
+           name="phones[]"
+           value="555-0102"&gt;
+  &lt;/div&gt;
 &lt;/form-repeatable&gt;</code></pre>
 						<div class="demo">
 							<form id="prepopulated-form">
 								<fieldset>
 									<legend>Phone Numbers</legend>
-									<form-repeatable removable>
-										<label for="phone-1">Phone 1</label>
-										<input
-											id="phone-1"
-											type="tel"
-											name="phones[]"
-											value="555-0100"
-										/>
-									</form-repeatable>
-									<form-repeatable removable>
-										<label for="phone-2">Phone 2</label>
-										<input
-											id="phone-2"
-											type="tel"
-											name="phones[]"
-											value="555-0101"
-										/>
-									</form-repeatable>
 									<form-repeatable>
-										<label for="phone-3">Phone 3</label>
-										<input
-											id="phone-3"
-											type="tel"
-											name="phones[]"
-											placeholder="Add another phone"
-										/>
+										<div>
+											<label for="phone-1">Phone 1</label>
+											<input
+												id="phone-1"
+												type="tel"
+												name="phones[]"
+												value="555-0100"
+											/>
+										</div>
+										<div>
+											<label for="phone-2">Phone 2</label>
+											<input
+												id="phone-2"
+												type="tel"
+												name="phones[]"
+												value="555-0101"
+											/>
+										</div>
+										<div>
+											<label for="phone-3">Phone 3</label>
+											<input
+												id="phone-3"
+												type="tel"
+												name="phones[]"
+												value="555-0102"
+											/>
+										</div>
 									</form-repeatable>
 								</fieldset>
 								<button type="submit">Submit</button>
@@ -194,47 +207,185 @@
 				</div>
 			</section>
 
-			<!-- Multiple Fields -->
+			<!-- Min/Max Constraints -->
 			<section>
-				<h2>Multiple Fields per Item</h2>
+				<h2>Min/Max Constraints</h2>
 				<p>
-					Each repeatable section can contain multiple related fields.
+					Control the number of allowed groups with
+					<code>min</code> and <code>max</code> attributes.
 				</p>
 
 				<div class="demo-section">
-					<h3>Team Members</h3>
-					<p>Add team members with name and email fields.</p>
+					<h3>Team Members (2-5 allowed)</h3>
+					<p>
+						This example requires at least 2 members and allows up
+						to 5. Remove buttons are hidden when at minimum, add
+						button hidden at maximum.
+					</p>
+					<div class="code-demo-pair">
+						<pre><code><mark>&lt;form-repeatable min="2" max="5"&gt;</mark>
+  &lt;div&gt;
+    &lt;label for="member-1"&gt;Member 1&lt;/label&gt;
+    &lt;input id="member-1" type="text"
+           name="members[]"&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;label for="member-2"&gt;Member 2&lt;/label&gt;
+    &lt;input id="member-2" type="text"
+           name="members[]"&gt;
+  &lt;/div&gt;
+<mark>&lt;/form-repeatable&gt;</mark></code></pre>
+						<div class="demo">
+							<form id="minmax-form">
+								<fieldset>
+									<legend>Project Team</legend>
+									<form-repeatable min="2" max="5">
+										<div>
+											<label for="member-1"
+												>Member 1</label
+											>
+											<input
+												id="member-1"
+												type="text"
+												name="members[]"
+												placeholder="Team member name"
+											/>
+										</div>
+										<div>
+											<label for="member-2"
+												>Member 2</label
+											>
+											<input
+												id="member-2"
+												type="text"
+												name="members[]"
+												placeholder="Team member name"
+											/>
+										</div>
+									</form-repeatable>
+								</fieldset>
+								<button type="submit">Submit</button>
+							</form>
+							<div class="output" id="minmax-output"></div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Explicit Template Element -->
+			<section>
+				<h2>Explicit Template Element</h2>
+				<p>
+					Use a <code>&lt;template&gt;</code> element for explicit
+					template definition with <code>{n}</code> placeholders.
+				</p>
+
+				<div class="demo-section">
+					<h3>Email Addresses</h3>
+					<p>
+						The template element is removed from the light DOM and
+						used internally. Use <code>{n}</code> as the placeholder
+						for numbers.
+					</p>
 					<div class="code-demo-pair">
 						<pre><code>&lt;form-repeatable&gt;
-  &lt;label for="name-1"&gt;Name 1&lt;/label&gt;
-  &lt;input id="name-1" type="text"
-         name="name-1"
-         placeholder="Full name"&gt;
+  <mark>&lt;template&gt;</mark>
+    &lt;div&gt;
+      &lt;label for="email-<mark>{n}</mark>"&gt;Email <mark>{n}</mark>&lt;/label&gt;
+      &lt;input id="email-<mark>{n}</mark>"
+             type="email"
+             name="emails[]"
+             placeholder="user@example.com"&gt;
+    &lt;/div&gt;
+  <mark>&lt;/template&gt;</mark>
+&lt;/form-repeatable&gt;</code></pre>
+						<div class="demo">
+							<form id="template-form">
+								<fieldset>
+									<legend>Contact Emails</legend>
+									<form-repeatable>
+										<template>
+											<div>
+												<label for="email-{n}"
+													>Email {n}</label
+												>
+												<input
+													id="email-{n}"
+													type="email"
+													name="emails[]"
+													placeholder="user@example.com"
+												/>
+											</div>
+										</template>
+									</form-repeatable>
+								</fieldset>
+								<button type="submit">Submit</button>
+							</form>
+							<div class="output" id="template-output"></div>
+						</div>
+					</div>
+				</div>
+			</section>
 
-  &lt;label for="email-1"&gt;Email 1&lt;/label&gt;
-  &lt;input id="email-1" type="email"
-         name="email-1"
-         placeholder="email@example.com"&gt;
+			<!-- Multiple Fields -->
+			<section>
+				<h2>Multiple Fields per Group</h2>
+				<p>
+					Each repeatable group can contain multiple related fields.
+					All elements inside the template/first child are duplicated
+					together.
+				</p>
+
+				<div class="demo-section">
+					<h3>Guest Information</h3>
+					<p>Add guests with name and dietary requirements.</p>
+					<div class="code-demo-pair">
+						<pre><code>&lt;form-repeatable&gt;
+  &lt;fieldset&gt;
+    &lt;legend&gt;Guest 1&lt;/legend&gt;
+    &lt;label for="guest-1"&gt;Name 1&lt;/label&gt;
+    &lt;input id="guest-1" type="text"
+           name="guests[]"&gt;
+
+    &lt;label for="diet-1"&gt;Dietary Needs 1&lt;/label&gt;
+    &lt;select id="diet-1" name="diets[]"&gt;
+      &lt;option value=""&gt;None&lt;/option&gt;
+      &lt;option value="vegetarian"&gt;Vegetarian&lt;/option&gt;
+      &lt;option value="vegan"&gt;Vegan&lt;/option&gt;
+      &lt;option value="gluten-free"&gt;Gluten Free&lt;/option&gt;
+    &lt;/select&gt;
+  &lt;/fieldset&gt;
 &lt;/form-repeatable&gt;</code></pre>
 						<div class="demo">
 							<form id="multiple-form">
 								<fieldset>
-									<legend>Project Team</legend>
+									<legend>Event Guests</legend>
 									<form-repeatable>
-										<label for="name-1">Name 1</label>
-										<input
-											id="name-1"
-											type="text"
-											name="name-1"
-											placeholder="Full name"
-										/>
-										<label for="email-1">Email 1</label>
-										<input
-											id="email-1"
-											type="email"
-											name="email-1"
-											placeholder="email@example.com"
-										/>
+										<fieldset>
+											<legend>Guest 1</legend>
+											<label for="guest-1">Name 1</label>
+											<input
+												id="guest-1"
+												type="text"
+												name="guests[]"
+												placeholder="Guest name"
+											/>
+											<label for="diet-1"
+												>Dietary Needs 1</label
+											>
+											<select id="diet-1" name="diets[]">
+												<option value="">None</option>
+												<option value="vegetarian">
+													Vegetarian
+												</option>
+												<option value="vegan">
+													Vegan
+												</option>
+												<option value="gluten-free">
+													Gluten Free
+												</option>
+											</select>
+										</fieldset>
 									</form-repeatable>
 								</fieldset>
 								<button type="submit">Submit</button>
@@ -248,19 +399,23 @@
 			<!-- Custom Labels -->
 			<section>
 				<h2>Custom Button Labels</h2>
-				<p>Customize the "Add" and "Remove" button labels.</p>
+				<p>
+					Customize the "Add" and "Remove" button labels for better
+					context.
+				</p>
 
 				<div class="demo-section">
 					<h3>Shopping List</h3>
-					<p>Using custom button labels for better context.</p>
+					<p>Using custom button labels.</p>
 					<div class="code-demo-pair">
 						<pre><code><mark>&lt;form-repeatable
   add-label="Add Item"
   remove-label="Delete Item"&gt;</mark>
-  &lt;label for="item-1"&gt;Item 1&lt;/label&gt;
-  &lt;input id="item-1" type="text"
-         name="items[]"
-         placeholder="Enter item"&gt;
+  &lt;div&gt;
+    &lt;label for="item-1"&gt;Item 1&lt;/label&gt;
+    &lt;input id="item-1" type="text"
+           name="items[]"&gt;
+  &lt;/div&gt;
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
 						<div class="demo">
 							<form id="custom-labels-form">
@@ -270,13 +425,15 @@
 										add-label="Add Item"
 										remove-label="Delete Item"
 									>
-										<label for="item-1">Item 1</label>
-										<input
-											id="item-1"
-											type="text"
-											name="items[]"
-											placeholder="Enter item"
-										/>
+										<div>
+											<label for="item-1">Item 1</label>
+											<input
+												id="item-1"
+												type="text"
+												name="items[]"
+												placeholder="Enter item"
+											/>
+										</div>
 									</form-repeatable>
 								</fieldset>
 								<button type="submit">Submit</button>
@@ -289,67 +446,81 @@
 
 			<!-- Different Input Types -->
 			<section>
-				<h2>Different Input Types</h2>
+				<h2>Different Container Elements</h2>
 				<p>
-					Works with various input types including select and
-					textarea.
+					The template can be any element type - div, fieldset, p,
+					etc. Works with various input types.
 				</p>
 
 				<div class="demo-section">
 					<h3>Education History</h3>
-					<p>
-						Add multiple education entries with different field
-						types.
-					</p>
+					<p>Using a fieldset as the repeating container.</p>
 					<div class="code-demo-pair">
 						<pre><code>&lt;form-repeatable&gt;
-  &lt;label for="school-1"&gt;School 1&lt;/label&gt;
-  &lt;input id="school-1" type="text"
-         name="school-1"&gt;
+  <mark>&lt;fieldset&gt;</mark>
+    &lt;legend&gt;School 1&lt;/legend&gt;
+    &lt;label for="school-1"&gt;Institution 1&lt;/label&gt;
+    &lt;input id="school-1" type="text"
+           name="schools[]"&gt;
 
-  &lt;label for="degree-1"&gt;Degree 1&lt;/label&gt;
-  &lt;select id="degree-1" name="degree-1"&gt;
-    &lt;option&gt;Select degree&lt;/option&gt;
-    &lt;option value="hs"&gt;High School&lt;/option&gt;
-    &lt;option value="bs"&gt;Bachelor's&lt;/option&gt;
-  &lt;/select&gt;
+    &lt;label for="degree-1"&gt;Degree 1&lt;/label&gt;
+    &lt;select id="degree-1" name="degrees[]"&gt;
+      &lt;option&gt;Select degree&lt;/option&gt;
+      &lt;option value="hs"&gt;High School&lt;/option&gt;
+      &lt;option value="bs"&gt;Bachelor's&lt;/option&gt;
+    &lt;/select&gt;
 
-  &lt;label for="notes-1"&gt;Notes 1&lt;/label&gt;
-  &lt;textarea id="notes-1"
-            name="notes-1"&gt;&lt;/textarea&gt;
+    &lt;label for="notes-1"&gt;Notes 1&lt;/label&gt;
+    &lt;textarea id="notes-1"
+              name="notes[]"&gt;&lt;/textarea&gt;
+  <mark>&lt;/fieldset&gt;</mark>
 &lt;/form-repeatable&gt;</code></pre>
 						<div class="demo">
 							<form id="input-types-form">
 								<fieldset>
 									<legend>Schools Attended</legend>
 									<form-repeatable>
-										<label for="school-1">School 1</label>
-										<input
-											id="school-1"
-											type="text"
-											name="school-1"
-											placeholder="School name"
-										/>
-										<label for="degree-1">Degree 1</label>
-										<select id="degree-1" name="degree-1">
-											<option value="">
-												Select degree
-											</option>
-											<option value="hs">
-												High School
-											</option>
-											<option value="bs">
-												Bachelor's
-											</option>
-											<option value="ms">Master's</option>
-											<option value="phd">Ph.D.</option>
-										</select>
-										<label for="notes-1">Notes 1</label>
-										<textarea
-											id="notes-1"
-											name="notes-1"
-											placeholder="Additional information"
-										></textarea>
+										<fieldset>
+											<legend>School 1</legend>
+											<label for="school-1"
+												>Institution 1</label
+											>
+											<input
+												id="school-1"
+												type="text"
+												name="schools[]"
+												placeholder="School name"
+											/>
+											<label for="degree-1"
+												>Degree 1</label
+											>
+											<select
+												id="degree-1"
+												name="degrees[]"
+											>
+												<option value="">
+													Select degree
+												</option>
+												<option value="hs">
+													High School
+												</option>
+												<option value="bs">
+													Bachelor's
+												</option>
+												<option value="ms">
+													Master's
+												</option>
+												<option value="phd">
+													Ph.D.
+												</option>
+											</select>
+											<label for="notes-1">Notes 1</label>
+											<textarea
+												id="notes-1"
+												name="notes[]"
+												placeholder="Additional information"
+											></textarea>
+										</fieldset>
 									</form-repeatable>
 								</fieldset>
 								<button type="submit">Submit</button>
@@ -364,24 +535,26 @@
 			<section>
 				<h2>Events</h2>
 				<p>
-					Listen to custom events fired when fields are added or
+					Listen to custom events fired when groups are added or
 					removed.
 				</p>
 
 				<div class="demo-section">
 					<h3>Event Logging</h3>
 					<p>
-						Watch the console or the output below to see events
-						firing.
+						Watch the output below to see events firing with group
+						count details.
 					</p>
 					<div class="code-demo-pair">
 						<pre><code><mark>&lt;form-repeatable id="event-repeatable"&gt;</mark>
-  &lt;label for="ingredient-1"&gt;
-    Ingredient 1
-  &lt;/label&gt;
-  &lt;input id="ingredient-1"
-         type="text"
-         name="ingredients[]"&gt;
+  &lt;div&gt;
+    &lt;label for="ingredient-1"&gt;
+      Ingredient 1
+    &lt;/label&gt;
+    &lt;input id="ingredient-1"
+           type="text"
+           name="ingredients[]"&gt;
+  &lt;/div&gt;
 <mark>&lt;/form-repeatable&gt;</mark>
 
 &lt;script&gt;
@@ -390,12 +563,12 @@
 
   <mark>repeatable.addEventListener(
     'form-repeatable:added', (e) =&gt; {</mark>
-    console.log('Added field:', e.detail);
+    console.log('Added:', e.detail.groupCount);
   <mark>});</mark>
 
   <mark>repeatable.addEventListener(
     'form-repeatable:removed', (e) =&gt; {</mark>
-    console.log('Removed field:', e.detail);
+    console.log('Removed:', e.detail.groupCount);
   <mark>});</mark>
 &lt;/script&gt;</code></pre>
 						<div class="demo">
@@ -403,15 +576,17 @@
 								<fieldset>
 									<legend>Ingredients</legend>
 									<form-repeatable id="event-repeatable">
-										<label for="ingredient-1"
-											>Ingredient 1</label
-										>
-										<input
-											id="ingredient-1"
-											type="text"
-											name="ingredients[]"
-											placeholder="Add ingredient"
-										/>
+										<div>
+											<label for="ingredient-1"
+												>Ingredient 1</label
+											>
+											<input
+												id="ingredient-1"
+												type="text"
+												name="ingredients[]"
+												placeholder="Add ingredient"
+											/>
+										</div>
 									</form-repeatable>
 								</fieldset>
 							</form>
@@ -428,7 +603,8 @@
 			<section>
 				<h2>Custom Styling with ::part()</h2>
 				<p>
-					Use CSS <code>::part()</code> to style buttons and controls.
+					Use CSS <code>::part()</code> to style the component's
+					shadow DOM parts.
 				</p>
 
 				<div class="demo-section">
@@ -439,38 +615,33 @@
 					</p>
 					<div class="code-demo-pair">
 						<pre><code>&lt;style&gt;
-  form-repeatable.custom<mark>::part(add-button)</mark>::before {
-    content: '+ ';
-  }
-
-  form-repeatable.custom<mark>::part(add-button)</mark> {
+  form-repeatable<mark>::part(add-button)</mark> {
     background: green;
     color: white;
   }
 
-  form-repeatable.custom<mark>::part(remove-button)</mark>::before {
-    content: '− ';
-  }
-
-  form-repeatable.custom<mark>::part(remove-button)</mark> {
+  form-repeatable<mark>::part(remove-button)</mark> {
     background: red;
     color: white;
+  }
+
+  form-repeatable<mark>::part(group)</mark> {
+    padding: 1rem;
+    background: #f5f5f5;
+    margin-bottom: 0.5rem;
   }
 &lt;/style&gt;
 
 &lt;form-repeatable&gt;
-  &lt;label for="task-1"&gt;Task 1&lt;/label&gt;
-  &lt;input id="task-1" type="text"
-         name="tasks[]"&gt;
+  &lt;div&gt;
+    &lt;label for="task-1"&gt;Task 1&lt;/label&gt;
+    &lt;input id="task-1" type="text"
+           name="tasks[]"&gt;
+  &lt;/div&gt;
 &lt;/form-repeatable&gt;</code></pre>
 						<div class="demo">
 							<style>
-								#styled-form
-									form-repeatable::part(button add)::before {
-									content: '+ ';
-								}
-
-								#styled-form form-repeatable::part(button add) {
+								#styled-form form-repeatable::part(add-button) {
 									background: green;
 									color: white;
 									border: none;
@@ -480,19 +651,12 @@
 								}
 
 								#styled-form
-									form-repeatable::part(button add):hover {
+									form-repeatable::part(add-button):hover {
 									background: darkgreen;
 								}
 
 								#styled-form
-									form-repeatable::part(
-										button remove
-									)::before {
-									content: '− ';
-								}
-
-								#styled-form
-									form-repeatable::part(button remove) {
+									form-repeatable::part(remove-button) {
 									background: red;
 									color: white;
 									border: none;
@@ -502,102 +666,35 @@
 								}
 
 								#styled-form
-									form-repeatable::part(button remove):hover {
+									form-repeatable::part(remove-button):hover {
 									background: darkred;
+								}
+
+								#styled-form form-repeatable::part(group) {
+									padding: 1rem;
+									background: #f5f5f5;
+									border-radius: 4px;
+									margin-bottom: 0.5rem;
 								}
 							</style>
 							<form id="styled-form">
 								<fieldset>
 									<legend>Styled Example</legend>
-									<form-repeatable class="custom">
-										<label for="task-1">Task 1</label>
-										<input
-											id="task-1"
-											type="text"
-											name="tasks[]"
-											placeholder="Enter task"
-										/>
+									<form-repeatable>
+										<div>
+											<label for="task-1">Task 1</label>
+											<input
+												id="task-1"
+												type="text"
+												name="tasks[]"
+												placeholder="Enter task"
+											/>
+										</div>
 									</form-repeatable>
 								</fieldset>
 								<button type="submit">Submit</button>
 							</form>
 							<div class="output" id="styled-output"></div>
-						</div>
-					</div>
-				</div>
-			</section>
-
-			<!-- Directionality -->
-			<section>
-				<h2>Right-to-Left (RTL) Support</h2>
-				<p>
-					The component automatically respects text directionality for
-					accessible button labels.
-				</p>
-
-				<div class="demo-section">
-					<h3>Multilingual support</h3>
-					<p>
-						Use <code>add-label</code> and
-						<code>remove-label</code> to provide localized button
-						labels. The component automatically adjusts for
-						right-to-left text direction.
-					</p>
-					<div class="code-demo-pair">
-						<pre><code>&lt;div dir="rtl"&gt;
-  &lt;form-repeatable
-    removable
-    add-label="إضافة آخر"
-    remove-label="إزالة"&gt;
-    &lt;label for="name-1"&gt;اسم 1&lt;/label&gt;
-    &lt;input id="name-1" type="text"
-           name="names[]"
-           value="محمد"&gt;
-  &lt;/form-repeatable&gt;
-
-  &lt;form-repeatable
-    add-label="إضافة آخر"
-    remove-label="إزالة"&gt;
-    &lt;label for="name-2"&gt;اسم 2&lt;/label&gt;
-    &lt;input id="name-2" type="text"
-           name="names[]"&gt;
-  &lt;/form-repeatable&gt;
-&lt;/div&gt;</code></pre>
-						<div class="demo">
-							<div dir="rtl" lang="">
-								<form id="rtl-form">
-									<fieldset>
-										<legend>الأسماء</legend>
-										<form-repeatable
-											removable
-											add-label="إضافة آخر"
-											remove-label="إزالة"
-										>
-											<label for="name-ar-1">اسم 1</label>
-											<input
-												id="name-ar-1"
-												type="text"
-												name="names[]"
-												value="محمد"
-											/>
-										</form-repeatable>
-										<form-repeatable
-											add-label="إضافة آخر"
-											remove-label="إزالة"
-										>
-											<label for="name-ar-2">اسم 2</label>
-											<input
-												id="name-ar-2"
-												type="text"
-												name="names[]"
-												placeholder="أدخل الاسم"
-											/>
-										</form-repeatable>
-									</fieldset>
-									<button type="submit">إرسال</button>
-								</form>
-								<div class="output" id="rtl-output"></div>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -610,16 +707,38 @@
 				<h3>Attributes</h3>
 				<ul>
 					<li>
-						<code>removable</code> - Boolean attribute. Marks the
-						field as removable and shows a "Remove" button.
+						<code>min</code> - Number (default: 1). Minimum number
+						of groups required. Must be a positive integer. Remove
+						buttons are hidden when at minimum.
 					</li>
 					<li>
-						<code>add-label</code> - String. Custom label for the
-						"Add" button (default: "Add Another").
+						<code>max</code> - Number (optional). Maximum number of
+						groups allowed. Must be greater than min. Add button is
+						hidden when at maximum.
 					</li>
 					<li>
-						<code>remove-label</code> - String. Custom label for the
-						"Remove" button (default: "Remove").
+						<code>add-label</code> - String (default: "Add
+						Another"). Custom label for the add button.
+					</li>
+					<li>
+						<code>remove-label</code> - String (default: "Remove").
+						Custom label for the remove buttons.
+					</li>
+				</ul>
+
+				<h3>Template Definition</h3>
+				<ul>
+					<li>
+						<strong>First Child:</strong> By default, the first
+						child element becomes the template. Numbers in IDs,
+						labels, and text are automatically converted to
+						<code>{n}</code> placeholders.
+					</li>
+					<li>
+						<strong>Explicit Template:</strong> Use a
+						<code>&lt;template&gt;</code> element with
+						<code>{n}</code> placeholders for explicit control. The
+						template element is removed from light DOM.
 					</li>
 				</ul>
 
@@ -627,39 +746,84 @@
 				<ul>
 					<li>
 						<code>form-repeatable:added</code> - Fired when a new
-						field is added. Detail contains
-						<code>{original, clone}</code>.
+						group is added. Detail contains
+						<code>{groupCount}</code>.
 					</li>
 					<li>
 						<code>form-repeatable:removed</code> - Fired when a
-						field is removed. Detail contains
-						<code>{element}</code>.
+						group is removed. Detail contains
+						<code>{groupCount}</code>.
 					</li>
 				</ul>
 
 				<h3>CSS Parts</h3>
 				<ul>
 					<li>
-						<code>::part(content)</code> - The container for the
-						slotted content.
+						<code>::part(groups)</code> - Container for all groups
+						(default: CSS grid with 2-column layout).
 					</li>
 					<li>
-						<code>::part(button)</code> - Both buttons (style all
-						buttons together).
+						<code>::part(group)</code> - Each repeatable group
+						wrapper (default: subgrid spanning both columns).
 					</li>
 					<li>
-						<code>::part(add-button)</code> - The "Add Another"
-						button.
+						<code>::part(content)</code> - Container for the group's
+						fields (default: column 1).
 					</li>
 					<li>
-						<code>::part(remove-button)</code> - The "Remove"
-						button.
+						<code>::part(group-controls)</code> - Container for
+						group-level controls, remove button (default: column 2).
 					</li>
 					<li>
-						<code>::part(controls)</code> - The container for
-						control buttons.
+						<code>::part(controls)</code> - Container for main
+						controls, add button (default: below groups).
+					</li>
+					<li><code>::part(add-button)</code> - The add button.</li>
+					<li>
+						<code>::part(remove-button)</code> - The remove buttons.
 					</li>
 				</ul>
+
+				<h3>Default Styling</h3>
+				<p>
+					The component uses a <strong>CSS Grid layout</strong> by
+					default:
+				</p>
+				<ul>
+					<li>
+						Two-column grid:
+						<code>minmax(min-content, 2fr)</code> and
+						<code>minmax(min-content, 1fr)</code>
+					</li>
+					<li>
+						Each group uses <code>subgrid</code> to align content
+						with controls
+					</li>
+					<li>
+						Content appears in column 1, remove buttons in column 2
+					</li>
+					<li>Add button appears below all groups</li>
+					<li>
+						<strong
+							>Global stylesheets are automatically
+							adopted</strong
+						>
+						into the shadow DOM, so your page styles will apply to
+						elements inside the component
+					</li>
+				</ul>
+
+				<h3>Form Participation</h3>
+				<p>
+					This component uses the
+					<strong>ElementInternals API</strong> for native form
+					participation. All inputs within the shadow DOM are
+					automatically collected and submitted with the form using
+					<code>FormData</code>. Supports form reset and disabled
+					states. Browser support: 95% (Chrome 77+, Firefox 93+,
+					Safari 16.4+).
+				</p>
+
 				<p>
 					For complete documentation, see the
 					<a
@@ -717,11 +881,12 @@
 
 			setupFormHandler('basic-form', 'basic-output');
 			setupFormHandler('prepopulated-form', 'prepopulated-output');
+			setupFormHandler('minmax-form', 'minmax-output');
+			setupFormHandler('template-form', 'template-output');
 			setupFormHandler('multiple-form', 'multiple-output');
 			setupFormHandler('custom-labels-form', 'custom-labels-output');
 			setupFormHandler('input-types-form', 'input-types-output');
 			setupFormHandler('styled-form', 'styled-output');
-			setupFormHandler('rtl-form', 'rtl-output');
 
 			// Event logging
 			const eventLog = document.getElementById('event-log');
@@ -729,18 +894,18 @@
 
 			function logEvent(eventName, detail) {
 				const timestamp = new Date().toLocaleTimeString();
-				const logEntry = `[${timestamp}] ${eventName}\n`;
+				const logEntry = `[${timestamp}] ${eventName} - Group count: ${detail.groupCount}\n`;
 				eventLog.textContent = logEntry + eventLog.textContent;
 			}
 
-			document.addEventListener('form-repeatable:added', (e) => {
+			eventRepeatable.addEventListener('form-repeatable:added', (e) => {
 				logEvent('form-repeatable:added', e.detail);
-				console.log('Field added:', e.detail);
+				console.log('Group added:', e.detail);
 			});
 
-			document.addEventListener('form-repeatable:removed', (e) => {
+			eventRepeatable.addEventListener('form-repeatable:removed', (e) => {
 				logEvent('form-repeatable:removed', e.detail);
-				console.log('Field removed:', e.detail);
+				console.log('Group removed:', e.detail);
 			});
 		</script>
 	</body>
