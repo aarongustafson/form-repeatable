@@ -56,7 +56,8 @@ p {
 }
 
 code {
-	background: ButtonFace;
+	background-color: ButtonFace;
+  color: ButtonText;
 	padding: 0.125rem 0.25rem;
 	border-radius: 3px;
 	font-family: 'Courier New', Courier, monospace;
@@ -220,6 +221,7 @@ input:not([type='checkbox'], [type='radio'], [type='submit'], [type='reset']),
 select,
 textarea {
 	display: block;
+  box-sizing: border-box;
 	padding: 0.25rem 0.5rem;
 	border: 1px solid ButtonBorder;
 	border-radius: 4px;
@@ -237,8 +239,7 @@ textarea {
 	border-color: AccentColor;
 }
 
-button[type='submit'],
-button[type='reset'] {
+button {
 	background: ButtonFace;
 	color: ButtonText;
 	border: 1px solid ButtonBorder;
@@ -251,8 +252,7 @@ button[type='reset'] {
 	margin-inline-end: 0.5rem;
 }
 
-button[type='submit']:hover,
-button[type='reset']:hover {
+button:is(:hover,:focus-visible) {
 	opacity: 0.8;
 }
 
