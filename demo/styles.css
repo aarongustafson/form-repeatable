@@ -194,6 +194,10 @@ label {
 	margin-block: 1rem;
 }
 
+div:not([class]):first-child > label:first-child {
+  margin-block-start: 0;
+}
+
 label:has(+ input),
 label:has(+ select),
 label:has(+ textarea) {

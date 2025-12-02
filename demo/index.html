@@ -7,20 +7,8 @@
 		<link rel="stylesheet" href="./styles.css" />
 		<style>
 			::part(button) {
-				background: ButtonFace;
-				color: ButtonText;
-				border: 1px solid ButtonBorder;
 				padding: 0.3rem 0.5rem;
-				border-radius: 4px;
-				font-size: 1rem;
-				font-weight: bold;
-				cursor: pointer;
-				margin-block-start: 1rem;
-				margin-inline-end: 0.5rem;
-			}
-
-			::part(button):is(:hover, :focus-visible) {
-				opacity: 0.8;
+				margin-block: 0;
 			}
 
 			.output {
@@ -65,18 +53,10 @@
 			.info-box {
 				margin-top: 2rem;
 				padding: 1.5rem;
-				background-color: #f0f7ff;
-				border-left: 4px solid #0066cc;
+				background-color: ButtonFace;
+				color: ButtonText;
+				border-left: 4px solid ButtonBorder;
 				border-radius: 4px;
-			}
-
-			.info-box h4 {
-				margin-top: 0;
-				color: #0066cc;
-			}
-
-			.info-box ul {
-				margin-bottom: 0;
 			}
 		</style>
 	</head>
@@ -252,6 +232,7 @@
 							<form id="minmax-form">
 								<fieldset>
 									<legend>Project Team</legend>
+									<p>Teams can be between 2 and 5 members.</p>
 									<form-repeatable min="2" max="5">
 										<div>
 											<label for="member-1"
@@ -569,7 +550,7 @@
     console.log('Added:', e.detail.groupCount);
   <mark>});</mark>
 
-  <mark>repeatable.addEventListener(
+  <mark>repeatable.addEventLinpx servetener(
     'form-repeatable:removed', (e) =&gt; {</mark>
     console.log('Removed:', e.detail.groupCount);
   <mark>});</mark>
@@ -645,7 +626,7 @@
 						<div class="demo">
 							<style>
 								#styled-form form-repeatable::part(add-button) {
-									background: green;
+									background-color: green;
 									color: white;
 									border: none;
 									padding: 0.5rem 1rem;
@@ -656,6 +637,7 @@
 								#styled-form
 									form-repeatable::part(add-button):hover {
 									background: darkgreen;
+									color: white;
 								}
 
 								#styled-form
@@ -676,6 +658,7 @@
 								#styled-form form-repeatable::part(group) {
 									padding: 1rem;
 									background: #f5f5f5;
+									color: black;
 									border-radius: 4px;
 									margin-bottom: 0.5rem;
 								}
