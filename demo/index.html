@@ -61,6 +61,23 @@
 			form-repeatable.custom::part(remove-button)::before {
 				content: '− ' / '';
 			}
+
+			.info-box {
+				margin-top: 2rem;
+				padding: 1.5rem;
+				background-color: #f0f7ff;
+				border-left: 4px solid #0066cc;
+				border-radius: 4px;
+			}
+
+			.info-box h4 {
+				margin-top: 0;
+				color: #0066cc;
+			}
+
+			.info-box ul {
+				margin-bottom: 0;
+			}
 		</style>
 	</head>
 	<body>
@@ -122,9 +139,7 @@
 										</div>
 									</form-repeatable>
 								</fieldset>
-								<button type="submit">Submit</button>
 							</form>
-							<div class="output" id="basic-output"></div>
 						</div>
 					</div>
 				</div>
@@ -199,9 +214,7 @@
 										</div>
 									</form-repeatable>
 								</fieldset>
-								<button type="submit">Submit</button>
 							</form>
-							<div class="output" id="prepopulated-output"></div>
 						</div>
 					</div>
 				</div>
@@ -264,9 +277,7 @@
 										</div>
 									</form-repeatable>
 								</fieldset>
-								<button type="submit">Submit</button>
 							</form>
-							<div class="output" id="minmax-output"></div>
 						</div>
 					</div>
 				</div>
@@ -319,9 +330,7 @@
 										</template>
 									</form-repeatable>
 								</fieldset>
-								<button type="submit">Submit</button>
 							</form>
-							<div class="output" id="template-output"></div>
 						</div>
 					</div>
 				</div>
@@ -388,9 +397,7 @@
 										</fieldset>
 									</form-repeatable>
 								</fieldset>
-								<button type="submit">Submit</button>
 							</form>
-							<div class="output" id="multiple-output"></div>
 						</div>
 					</div>
 				</div>
@@ -436,9 +443,7 @@
 										</div>
 									</form-repeatable>
 								</fieldset>
-								<button type="submit">Submit</button>
 							</form>
-							<div class="output" id="custom-labels-output"></div>
 						</div>
 					</div>
 				</div>
@@ -523,9 +528,7 @@
 										</fieldset>
 									</form-repeatable>
 								</fieldset>
-								<button type="submit">Submit</button>
 							</form>
-							<div class="output" id="input-types-output"></div>
 						</div>
 					</div>
 				</div>
@@ -692,11 +695,147 @@
 										</div>
 									</form-repeatable>
 								</fieldset>
-								<button type="submit">Submit</button>
 							</form>
-							<div class="output" id="styled-output"></div>
 						</div>
 					</div>
+				</div>
+			</section>
+
+			<!-- Form Participation Example -->
+			<section>
+				<h2>Form Participation with Mixed Fields</h2>
+				<p>
+					The component uses <strong>ElementInternals API</strong> for
+					native form participation. All inputs within the shadow DOM
+					are automatically collected and submitted with the form.
+					This example combines repeatable fields with regular form
+					fields to demonstrate seamless integration.
+				</p>
+
+				<div class="demo-section">
+					<h3>Event Registration Form</h3>
+					<p>
+						Fill in your details and add attendees. Click Submit to
+						see how the FormData combines regular fields with
+						repeatable groups.
+					</p>
+					<div class="code-demo-pair">
+						<pre><code>&lt;form id="combined-form"&gt;
+  &lt;!-- Regular form fields --&gt;
+  &lt;label for="event-name"&gt;Event Name&lt;/label&gt;
+  &lt;input id="event-name" name="eventName"
+         type="text" required&gt;
+
+  &lt;label for="event-date"&gt;Date&lt;/label&gt;
+  &lt;input id="event-date" name="eventDate"
+         type="date" required&gt;
+
+  &lt;!-- Repeatable fields via component --&gt;
+  &lt;fieldset&gt;
+    &lt;legend&gt;Attendees&lt;/legend&gt;
+    &lt;form-repeatable min="1" max="10"&gt;
+      &lt;div&gt;
+        &lt;label for="attendee-1"&gt;Attendee 1&lt;/label&gt;
+        &lt;input id="attendee-1" type="text"
+               name="attendees[]"
+               placeholder="Full name" required&gt;
+        &lt;label for="email-1"&gt;Email 1&lt;/label&gt;
+        &lt;input id="email-1" type="email"
+               name="emails[]"
+               placeholder="email@example.com"&gt;
+      &lt;/div&gt;
+    &lt;/form-repeatable&gt;
+  &lt;/fieldset&gt;
+
+  &lt;button type="submit"&gt;Register&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+						<div class="demo">
+							<form id="combined-form">
+								<label for="event-name">Event Name</label>
+								<input
+									id="event-name"
+									name="eventName"
+									type="text"
+									placeholder="Annual Conference"
+									required
+								/>
+
+								<label for="event-date">Date</label>
+								<input
+									id="event-date"
+									name="eventDate"
+									type="date"
+									required
+								/>
+
+								<label for="event-location">Location</label>
+								<input
+									id="event-location"
+									name="eventLocation"
+									type="text"
+									placeholder="City, State"
+								/>
+
+								<fieldset>
+									<legend>Attendees (Min: 1, Max: 10)</legend>
+									<form-repeatable min="1" max="10">
+										<div>
+											<label for="attendee-1"
+												>Attendee 1</label
+											>
+											<input
+												id="attendee-1"
+												type="text"
+												name="attendees[]"
+												placeholder="Full name"
+												required
+											/>
+											<label for="att-email-1"
+												>Email 1</label
+											>
+											<input
+												id="att-email-1"
+												type="email"
+												name="emails[]"
+												placeholder="email@example.com"
+											/>
+										</div>
+									</form-repeatable>
+								</fieldset>
+
+								<button type="submit">Register Event</button>
+							</form>
+							<div class="output" id="combined-output"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="info-box">
+					<h4>How It Works</h4>
+					<p>
+						When you submit the form, notice how the FormData
+						includes:
+					</p>
+					<ul>
+						<li>
+							<strong>Regular fields</strong> (eventName,
+							eventDate, eventLocation) from the light DOM
+						</li>
+						<li>
+							<strong>Repeatable fields</strong> (attendees[],
+							emails[]) collected from the shadow DOM via
+							ElementInternals
+						</li>
+						<li>
+							All values are properly combined into a single
+							FormData object
+						</li>
+					</ul>
+					<p>
+						The component automatically syncs its shadow DOM inputs
+						with the parent form, so no special handling is needed.
+						It works just like native form controls!
+					</p>
 				</div>
 			</section>
 
@@ -847,46 +986,57 @@
 
 		<script src="../define.js" type="module"></script>
 		<script type="module">
-			// Form submission handlers
-			function setupFormHandler(formId, outputId) {
-				const form = document.getElementById(formId);
-				const output = document.getElementById(outputId);
+			// Helper to display FormData contents
+			function displayFormData(form, output) {
+				const formData = new FormData(form);
+				const data = {};
 
-				form.addEventListener('submit', (e) => {
-					e.preventDefault();
-					const formData = new FormData(form);
-					const data = {};
-
-					for (let [key, value] of formData.entries()) {
-						if (key.endsWith('[]')) {
-							const arrayKey = key.slice(0, -2);
-							if (!data[arrayKey]) {
-								data[arrayKey] = [];
-							}
-							data[arrayKey].push(value);
+				for (let [key, value] of formData.entries()) {
+					if (key.endsWith('[]')) {
+						const arrayKey = key.slice(0, -2);
+						if (!data[arrayKey]) {
+							data[arrayKey] = [];
+						}
+						data[arrayKey].push(value);
+					} else {
+						if (!data[key]) {
+							data[key] = value;
+						} else if (Array.isArray(data[key])) {
+							data[key].push(value);
 						} else {
-							if (!data[key]) {
-								data[key] = value;
-							} else if (Array.isArray(data[key])) {
-								data[key].push(value);
-							} else {
-								data[key] = [data[key], value];
-							}
+							data[key] = [data[key], value];
 						}
 					}
+				}
 
-					output.innerHTML = `<h4>Form Data:</h4><pre>${JSON.stringify(data, null, 2)}</pre>`;
-				});
+				output.innerHTML = `<h4>FormData Contents:</h4><pre>${JSON.stringify(data, null, 2)}</pre>`;
 			}
 
-			setupFormHandler('basic-form', 'basic-output');
-			setupFormHandler('prepopulated-form', 'prepopulated-output');
-			setupFormHandler('minmax-form', 'minmax-output');
-			setupFormHandler('template-form', 'template-output');
-			setupFormHandler('multiple-form', 'multiple-output');
-			setupFormHandler('custom-labels-form', 'custom-labels-output');
-			setupFormHandler('input-types-form', 'input-types-output');
-			setupFormHandler('styled-form', 'styled-output');
+			// Form participation example
+			const combinedForm = document.getElementById('combined-form');
+			const combinedOutput = document.getElementById('combined-output');
+			const combinedRepeatable =
+				combinedForm.querySelector('form-repeatable');
+
+			// Show FormData on submit
+			combinedForm.addEventListener('submit', (e) => {
+				e.preventDefault();
+				displayFormData(combinedForm, combinedOutput);
+			});
+
+			// Auto-update FormData display when groups change
+			combinedRepeatable.addEventListener('form-repeatable:added', () => {
+				displayFormData(combinedForm, combinedOutput);
+			});
+			combinedRepeatable.addEventListener(
+				'form-repeatable:removed',
+				() => {
+					displayFormData(combinedForm, combinedOutput);
+				},
+			);
+
+			// Show initial state
+			displayFormData(combinedForm, combinedOutput);
 
 			// Event logging
 			const eventLog = document.getElementById('event-log');
