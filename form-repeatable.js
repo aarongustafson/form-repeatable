@@ -411,6 +411,8 @@ export class FormRepeatableElement extends HTMLElement {
 				.groups {
 					display: grid;
 					grid-template-columns: minmax(min-content, 2fr) minmax(min-content, 1fr);
+					row-gap: .5rem;
+					column-gap: 1rem;
 				}
 
 				.group {
@@ -431,7 +433,7 @@ export class FormRepeatableElement extends HTMLElement {
 
 				.controls {
 					display: block;
-					grid-area: controls;
+					margin-block-start: 1rem;
 				}
 
 				button {
