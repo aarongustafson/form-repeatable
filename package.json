@@ -1,6 +1,6 @@
 {
 	"name": "@aarongustafson/form-repeatable",
-	"version": "0.1.2",
+	"version": "1.0.0",
 	"description": "A web component that enables you to control the duplication of fields.",
 	"keywords": [
 		"html",
