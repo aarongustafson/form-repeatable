@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>form-repeatable via esm.sh</title>
+		<style>
+			body {
+				font-family: system-ui, sans-serif;
+				margin: 2rem;
+				line-height: 1.5;
+			}
+
+			form-repeatable {
+				display: block;
+				max-width: 480px;
+			}
+
+			label,
+			input,
+			button {
+				font: inherit;
+			}
+
+			input {
+				display: block;
+				width: 100%;
+				padding: 0.5rem;
+				margin-block: 0.5rem;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>esm.sh CDN sanity check</h1>
+		<p>
+			This page loads the component class from <code>esm.sh</code> and
+			registers it manually.
+		</p>
+
+		<form-repeatable>
+			<div>
+				<label for="email-1">Email 1</label>
+				<input id="email-1" type="email" name="emails[]" />
+			</div>
+		</form-repeatable>
+
+		<script type="module">
+			import { FormRepeatableElement } from 'https://esm.sh/@aarongustafson/form-repeatable@1.0.0/form-repeatable.js?bundle&target=es2022';
+
+			if (!customElements.get('form-repeatable')) {
+				customElements.define('form-repeatable', FormRepeatableElement);
+			}
+		</script>
+	</body>
+</html>

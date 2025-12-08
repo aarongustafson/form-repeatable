@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>form-repeatable via unpkg</title>
+		<style>
+			body {
+				font-family: system-ui, sans-serif;
+				margin: 2rem;
+				line-height: 1.5;
+			}
+
+			form-repeatable {
+				display: block;
+				max-width: 480px;
+			}
+
+			label,
+			input,
+			button {
+				font: inherit;
+			}
+
+			input {
+				display: block;
+				width: 100%;
+				padding: 0.5rem;
+				margin-block: 0.5rem;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>unpkg CDN sanity check</h1>
+		<p>
+			This page loads the guarded definition helper from
+			<code>unpkg</code> and registers the element when supported.
+		</p>
+
+		<form-repeatable>
+			<div>
+				<label for="email-1">Email 1</label>
+				<input id="email-1" type="email" name="emails[]" />
+			</div>
+		</form-repeatable>
+
+		<script type="module">
+			import { defineFormRepeatable } from 'https://unpkg.com/@aarongustafson/form-repeatable@latest/define.js?module';
+
+			defineFormRepeatable();
+		</script>
+	</body>
+</html>
