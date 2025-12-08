@@ -29,28 +29,36 @@ npm install @aarongustafson/form-repeatable
 
 ## Usage
 
-### Option 1: Auto-define the custom element (easiest)
-
-Import the package to automatically define the `<form-repeatable>` custom element:
-
-```javascript
-import '@aarongustafson/form-repeatable';
-```
-
-Or use the define-only script in HTML:
-
-```html
-<script src="./node_modules/@aarongustafson/form-repeatable/define.js" type="module"></script>
-```
-
-### Option 2: Import the class and define manually
+### Option 1: Import the class and define manually
 
 Import the class and define the custom element with your preferred tag name:
 
 ```javascript
-import { FormRepeatableElement } from '@aarongustafson/form-repeatable/form-repeatable.js';
+import { FormRepeatableElement } from '@aarongustafson/form-repeatable';
 
 customElements.define('my-custom-name', FormRepeatableElement);
+```
+
+### Option 2: Auto-define the custom element (browser environments only)
+
+Use the guarded definition helper to register the element when `customElements` is available:
+
+```javascript
+import '@aarongustafson/form-repeatable/define.js';
+```
+
+If you prefer to control when the element is registered, call the helper directly:
+
+```javascript
+import { defineFormRepeatable } from '@aarongustafson/form-repeatable/define.js';
+
+defineFormRepeatable();
+```
+
+You can also include the guarded script from HTML:
+
+```html
+<script src="./node_modules/@aarongustafson/form-repeatable/define.js" type="module"></script>
 ```
 
 ### Basic Example
