@@ -21,6 +21,11 @@ A single-instance web component that manages repeatable form field groups intern
 
 [Live Demo](https://aarongustafson.github.io/form-repeatable/demo/) ([Source](./demo/index.html))
 
+**Additional Examples:**
+
+- [unpkg CDN](https://aarongustafson.github.io/form-repeatable/demo/unpkg.html) ([Source](./demo/unpkg.html))
+- [esm.sh CDN](https://aarongustafson.github.io/form-repeatable/demo/esm.html) ([Source](./demo/esm.html))
+
 ## Installation
 
 ```bash
