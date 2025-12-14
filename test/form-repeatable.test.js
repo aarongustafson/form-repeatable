@@ -31,6 +31,53 @@ describe('FormRepeatableElement', () => {
 		});
 	});
 
+	describe('Property reflection', () => {
+		it('should reflect addLabel property to add-label attribute', () => {
+			const element = document.createElement('form-repeatable');
+			element.addLabel = 'Add Person';
+			expect(element.getAttribute('add-label')).toBe('Add Person');
+		});
+
+		it('should reflect removeLabel property to remove-label attribute', () => {
+			const element = document.createElement('form-repeatable');
+			element.removeLabel = 'Delete';
+			expect(element.getAttribute('remove-label')).toBe('Delete');
+		});
+
+		it('should reflect min property to min attribute', () => {
+			const element = document.createElement('form-repeatable');
+			element.min = 3;
+			expect(element.getAttribute('min')).toBe('3');
+		});
+
+		it('should reflect max property to max attribute', () => {
+			const element = document.createElement('form-repeatable');
+			element.max = 4;
+			expect(element.getAttribute('max')).toBe('4');
+		});
+
+		it('should upgrade properties set before definition', () => {
+			const uniqueTag = `form-repeatable-upgrade-${Date.now()}-${Math.random()
+				.toString(36)
+				.slice(2)}`;
+			const preUpgrade = document.createElement(uniqueTag);
+			preUpgrade.innerHTML = `
+				<div>
+					<label for="stop-1">Stop 1</label>
+					<input id="stop-1" name="stops[]">
+				</div>
+			`;
+			preUpgrade.addLabel = 'Add Stop';
+			document.body.appendChild(preUpgrade);
+
+			class UpgradedElement extends FormRepeatableElement {}
+			customElements.define(uniqueTag, UpgradedElement);
+
+			expect(preUpgrade.addLabel).toBe('Add Stop');
+			preUpgrade.remove();
+		});
+	});
+
 	describe('Template extraction', () => {
 		it('should use first child as template', () => {
 			const element = document.createElement('form-repeatable');
