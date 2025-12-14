@@ -93,6 +93,9 @@ export class FormRepeatableElement extends HTMLElement {
 		this._groups = [];
 		this._nextId = 1;
 		this._countRegex = /(.*)(\d+)(.*)/;
+		this._listenersInitialized = false;
+		this._handleShadowClick = this._handleShadowClick.bind(this);
+		this._handleFormInteraction = this._handleFormInteraction.bind(this);
 
 		// Adopt global stylesheets into shadow DOM
 		this._adoptGlobalStyles();
@@ -117,15 +120,41 @@ export class FormRepeatableElement extends HTMLElement {
 	}
 
 	connectedCallback() {
+		this.__upgradeProperty('addLabel');
+		this.__upgradeProperty('removeLabel');
+		this.__upgradeProperty('min');
+		this.__upgradeProperty('max');
+
 		this._extractTemplate();
 		this._initializeGroups();
 		this._render();
 		this._updateFormValue();
+
+		if (!this._listenersInitialized) {
+			this.shadowRoot.addEventListener('click', this._handleShadowClick);
+			this.addEventListener('input', this._handleFormInteraction);
+			this.addEventListener('change', this._handleFormInteraction);
+			this._listenersInitialized = true;
+		}
+	}
+
+	disconnectedCallback() {
+		if (!this._listenersInitialized) {
+			return;
+		}
+		this.shadowRoot.removeEventListener('click', this._handleShadowClick);
+		this.removeEventListener('input', this._handleFormInteraction);
+		this.removeEventListener('change', this._handleFormInteraction);
+		this._listenersInitialized = false;
 	}
 
 	attributeChangedCallback(name, oldValue, newValue) {
-		if (oldValue !== newValue && this.shadowRoot.children.length > 0) {
+		if (oldValue === newValue) {
+			return;
+		}
+		if (this.shadowRoot.children.length > 0) {
 			this._render();
+			this._updateFormValue();
 		}
 	}
 
@@ -133,9 +162,56 @@ export class FormRepeatableElement extends HTMLElement {
 	get addLabel() {
 		return this.getAttribute('add-label') || 'Add Another';
 	}
+	set addLabel(value) {
+		if (value === null || value === undefined || value === '') {
+			this.removeAttribute('add-label');
+		} else {
+			this.setAttribute('add-label', String(value));
+		}
+	}
 
 	get removeLabel() {
 		return this.getAttribute('remove-label') || 'Remove';
+	}
+	set removeLabel(value) {
+		if (value === null || value === undefined || value === '') {
+			this.removeAttribute('remove-label');
+		} else {
+			this.setAttribute('remove-label', String(value));
+		}
+	}
+
+	_handleShadowClick(event) {
+		const target = event
+			.target instanceof HTMLElement
+			? event.target.closest('button')
+			: null;
+		if (!target || !this.shadowRoot.contains(target)) {
+			return;
+		}
+		if (target.classList.contains('add')) {
+			event.preventDefault();
+			this._addGroup();
+			return;
+		}
+		if (target.classList.contains('remove')) {
+			event.preventDefault();
+			const groupId = parseInt(target.dataset.groupId || '', 10);
+			if (!Number.isNaN(groupId)) {
+				this._removeGroup(groupId);
+			}
+		}
+	}
+
+	_handleFormInteraction(event) {
+		const target = event.target;
+		if (
+			target instanceof HTMLInputElement ||
+			target instanceof HTMLTextAreaElement ||
+			target instanceof HTMLSelectElement
+		) {
+			this._updateFormValue();
+		}
 	}
 
 	get min() {
@@ -153,6 +229,21 @@ export class FormRepeatableElement extends HTMLElement {
 			return 1;
 		}
 		return value;
+	}
+	set min(value) {
+		if (value === null || value === undefined || value === '') {
+			this.removeAttribute('min');
+			return;
+		}
+		const parsed = Number(value);
+		if (Number.isInteger(parsed) && parsed > 0) {
+			this.setAttribute('min', String(parsed));
+			return;
+		}
+		console.warn(
+			`form-repeatable: Invalid min value "${value}". Using default of 1.`,
+		);
+		this.removeAttribute('min');
 	}
 
 	get max() {
@@ -172,6 +263,36 @@ export class FormRepeatableElement extends HTMLElement {
 			}
 		}
 		return this.hasAttribute('max') ? value : null;
+	}
+	set max(value) {
+		if (value === null || value === undefined || value === '') {
+			this.removeAttribute('max');
+			return;
+		}
+		const parsed = Number(value);
+		if (!Number.isInteger(parsed) || parsed <= 0) {
+			console.warn(
+				`form-repeatable: Invalid max value "${value}". Ignoring max limit.`,
+			);
+			this.removeAttribute('max');
+			return;
+		}
+		if (parsed <= this.min) {
+			console.warn(
+				`form-repeatable: max (${parsed}) must be greater than min (${this.min}). Ignoring max limit.`,
+			);
+			this.removeAttribute('max');
+			return;
+		}
+		this.setAttribute('max', String(parsed));
+	}
+
+	__upgradeProperty(prop) {
+		if (Object.prototype.hasOwnProperty.call(this, prop)) {
+			const value = this[prop];
+			delete this[prop];
+			this[prop] = value;
+		}
 	}
 
 	// Template extraction
@@ -474,9 +595,6 @@ export class FormRepeatableElement extends HTMLElement {
 				groupContainer.querySelector('[part="content"]');
 			contentContainer.appendChild(group.element);
 		});
-
-		// Setup event listeners
-		this._setupEventListeners();
 	}
 
 	// Get accessible label for remove button
@@ -489,36 +607,6 @@ export class FormRepeatableElement extends HTMLElement {
 			return `${this.removeLabel} ${labelText}`;
 		}
 		return this.removeLabel;
-	}
-
-	// Setup event listeners
-	_setupEventListeners() {
-		// Add button
-		const addButton = this.shadowRoot.querySelector('.add');
-		if (addButton) {
-			addButton.addEventListener('click', () => this._addGroup());
-		}
-
-		// Remove buttons
-		const removeButtons = this.shadowRoot.querySelectorAll('.remove');
-		removeButtons.forEach((button) => {
-			const groupId = parseInt(button.dataset.groupId, 10);
-			button.addEventListener('click', () => this._removeGroup(groupId));
-		});
-
-		// Listen to input changes to update form value
-		this._groups.forEach((group) => {
-			const inputs = group.element.querySelectorAll(
-				'input, select, textarea',
-			);
-			inputs.forEach((input) => {
-				['input', 'change'].forEach((eventType) => {
-					input.addEventListener(eventType, () =>
-						this._updateFormValue(),
-					);
-				});
-			});
-		});
 	}
 
 	// Form lifecycle callbacks
