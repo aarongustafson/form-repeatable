@@ -20,13 +20,16 @@
 	"type": "module",
 	"main": "index.js",
 	"module": "form-repeatable.js",
+	"types": "form-repeatable.d.ts",
 	"customElements": "custom-elements.json",
 	"exports": {
 		".": {
-			"import": "./index.js"
+			"import": "./index.js",
+			"types": "./form-repeatable.d.ts"
 		},
 		"./form-repeatable.js": {
-			"import": "./form-repeatable.js"
+			"import": "./form-repeatable.js",
+			"types": "./form-repeatable.d.ts"
 		},
 		"./define.js": {
 			"import": "./define.js"
@@ -35,6 +38,7 @@
 	},
 	"files": [
 		"form-repeatable.js",
+		"form-repeatable.d.ts",
 		"define.js",
 		"index.js",
 		"custom-elements.json",

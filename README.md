@@ -17,6 +17,13 @@ A single-instance web component that manages repeatable form field groups intern
 - ♿ **Accessible** - semantic HTML with proper ARIA labels
 - 🎯 **TypeScript-ready** with type definitions
 
+## TypeScript & Framework Support
+
+- Bundled `.d.ts` definitions describe `FormRepeatableElement` and `defineFormRepeatable`, so editors and build pipelines get full typing with zero config.
+- `addLabel`, `removeLabel`, `min`, and `max` now reflect between properties and attributes, keeping declarative templates and reactive frameworks in sync with the DOM.
+- `_upgradeProperty` ensures properties assigned before the browser upgrades the custom element are re-applied once the class is connected (useful for SSR and hydration scenarios).
+- Global `HTMLElementTagNameMap` augmentation lets TypeScript understand `document.querySelector('form-repeatable')` without additional type casts.
+
 ## Demo
 
 [Live Demo](https://aarongustafson.github.io/form-repeatable/demo/) ([Source](./demo/index.html))
