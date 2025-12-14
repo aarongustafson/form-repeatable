@@ -182,10 +182,10 @@ export class FormRepeatableElement extends HTMLElement {
 	}
 
 	_handleShadowClick(event) {
-		const target = event
-			.target instanceof HTMLElement
-			? event.target.closest('button')
-			: null;
+		const target =
+			event.target instanceof HTMLElement
+				? event.target.closest('button')
+				: null;
 		if (!target || !this.shadowRoot.contains(target)) {
 			return;
 		}
