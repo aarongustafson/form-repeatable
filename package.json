@@ -24,14 +24,15 @@
 	"customElements": "custom-elements.json",
 	"exports": {
 		".": {
-			"import": "./index.js",
-			"types": "./form-repeatable.d.ts"
+			"types": "./form-repeatable.d.ts",
+			"import": "./index.js"
 		},
 		"./form-repeatable.js": {
-			"import": "./form-repeatable.js",
-			"types": "./form-repeatable.d.ts"
+			"types": "./form-repeatable.d.ts",
+			"import": "./form-repeatable.js"
 		},
 		"./define.js": {
+			"types": "./define.d.ts",
 			"import": "./define.js"
 		},
 		"./custom-elements.json": "./custom-elements.json"
@@ -40,6 +41,7 @@
 		"form-repeatable.js",
 		"form-repeatable.d.ts",
 		"define.js",
+		"define.d.ts",
 		"index.js",
 		"custom-elements.json",
 		"README.md",
