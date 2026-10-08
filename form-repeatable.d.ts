@@ -9,8 +9,6 @@ export declare class FormRepeatableElement extends HTMLElement {
 	formDisabledCallback(disabled: boolean): void;
 }
 
-export declare function defineFormRepeatable(tagName?: string): boolean;
-
 declare global {
 	interface HTMLElementTagNameMap {
 		'form-repeatable': FormRepeatableElement;
