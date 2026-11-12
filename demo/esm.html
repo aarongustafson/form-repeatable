@@ -7,18 +7,63 @@
 		<link rel="stylesheet" href="./styles.css" />
 	</head>
 	<body>
-		<h1>esm.sh CDN sanity check</h1>
-		<p>
-			This page loads the component class from <code>esm.sh</code> and
-			registers it manually.
-		</p>
+		<header>
+			<h1>&lt;form-repeatable&gt; via esm.sh</h1>
+			<p>
+				Import the class and register it manually. See the
+				<a href="../">README</a> for the full API.
+			</p>
+		</header>
+		<main>
+			<section class="demo-section">
+				<h2>A contact’s email addresses</h2>
+				<p>
+					The class-only import does not register the element. After
+					registration, Add Another creates a labeled field and Remove
+					names the group it deletes. Without JavaScript or a
+					successful CDN load, the authored email field remains
+					usable; dynamic controls require enhancement.
+				</p>
+				<div class="code-demo-pair">
+					<pre><code>&lt;form&gt;
+  &lt;form-repeatable&gt;
+    &lt;div&gt;
+      &lt;label for="email-1"&gt;Email 1&lt;/label&gt;
+      &lt;input id="email-1" type="email" name="emails[]" /&gt;
+    &lt;/div&gt;
+  &lt;/form-repeatable&gt;
+&lt;/form&gt;
 
-		<form-repeatable>
-			<div>
-				<label for="email-1">Email 1</label>
-				<input id="email-1" type="email" name="emails[]" />
-			</div>
-		</form-repeatable>
+&lt;script type="module"&gt;
+  import { FormRepeatableElement } from 'https://esm.sh/@aarongustafson/form-repeatable@1.2.1/form-repeatable.js?bundle&amp;target=es2022';
+
+  if (!customElements.get('form-repeatable')) {
+    customElements.define('form-repeatable', FormRepeatableElement);
+  }
+&lt;/script&gt;</code></pre>
+					<div class="demo">
+						<form>
+							<form-repeatable>
+								<div>
+									<label for="email-1">Email 1</label>
+									<input
+										id="email-1"
+										type="email"
+										name="emails[]"
+									/>
+								</div>
+							</form-repeatable>
+						</form>
+					</div>
+				</div>
+			</section>
+		</main>
+		<footer>
+			<p>
+				Made with ❤️ by
+				<a href="https://github.com/aarongustafson">Aaron Gustafson</a>.
+			</p>
+		</footer>
 
 		<script type="module">
 			import { FormRepeatableElement } from 'https://esm.sh/@aarongustafson/form-repeatable@1.2.1/form-repeatable.js?bundle&target=es2022';

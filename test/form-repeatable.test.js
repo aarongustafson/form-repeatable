@@ -9,6 +9,22 @@ describe('FormRepeatableElement', () => {
 	});
 
 	describe('Basic functionality', () => {
+		it('syncs non-composed shadow changes and removes those listeners on disconnect', () => {
+			const element = document.createElement('form-repeatable');
+			element.innerHTML =
+				'<div><label for="entry-1">Entry 1</label><input id="entry-1" name="entries[]"></div>';
+			document.body.appendChild(element);
+			const update = vi.spyOn(element, '_updateFormValue');
+			const input = element.shadowRoot.querySelector('input');
+			input.dispatchEvent(new Event('change', { bubbles: true }));
+			expect(update).toHaveBeenCalledOnce();
+			element.remove();
+			update.mockClear();
+			input.dispatchEvent(new Event('change', { bubbles: true }));
+			expect(update).not.toHaveBeenCalled();
+			update.mockRestore();
+		});
+
 		it('should be defined', () => {
 			expect(customElements.get('form-repeatable')).toBe(
 				FormRepeatableElement,
