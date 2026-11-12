@@ -7,18 +7,68 @@
 		<link rel="stylesheet" href="./styles.css" />
 	</head>
 	<body>
-		<h1>unpkg CDN sanity check</h1>
-		<p>
-			This page loads the guarded definition helper from
-			<code>unpkg</code> and registers the element when supported.
-		</p>
+		<header>
+			<h1>&lt;form-repeatable&gt; via unpkg</h1>
+			<p>
+				Import the guarded definition helper. See the
+				<a href="../">README</a> for the full API.
+			</p>
+		</header>
+		<main>
+			<section class="demo-section">
+				<h2>Up to three email addresses</h2>
+				<p>
+					Importing <code>define.js</code> automatically attempts
+					registration; calling its helper again is safe. The
+					<code>max</code> attribute limits the groups, and authored
+					Add/Remove labels name the actions. Without JavaScript or a
+					successful CDN load, the original labeled field remains.
+				</p>
+				<div class="code-demo-pair">
+					<pre><code>&lt;form&gt;
+  &lt;form-repeatable
+    max="3"
+    add-label="Add email"
+    remove-label="Remove email"&gt;
+    &lt;div&gt;
+      &lt;label for="email-1"&gt;Email 1&lt;/label&gt;
+      &lt;input id="email-1" type="email" name="emails[]" /&gt;
+    &lt;/div&gt;
+  &lt;/form-repeatable&gt;
+&lt;/form&gt;
 
-		<form-repeatable>
-			<div>
-				<label for="email-1">Email 1</label>
-				<input id="email-1" type="email" name="emails[]" />
-			</div>
-		</form-repeatable>
+&lt;script type="module"&gt;
+  import { defineFormRepeatable } from 'https://unpkg.com/@aarongustafson/form-repeatable@latest/define.js?module';
+
+  defineFormRepeatable();
+&lt;/script&gt;</code></pre>
+					<div class="demo">
+						<form>
+							<form-repeatable
+								max="3"
+								add-label="Add email"
+								remove-label="Remove email"
+							>
+								<div>
+									<label for="email-1">Email 1</label>
+									<input
+										id="email-1"
+										type="email"
+										name="emails[]"
+									/>
+								</div>
+							</form-repeatable>
+						</form>
+					</div>
+				</div>
+			</section>
+		</main>
+		<footer>
+			<p>
+				Made with ❤️ by
+				<a href="https://github.com/aarongustafson">Aaron Gustafson</a>.
+			</p>
+		</footer>
 
 		<script type="module">
 			import { defineFormRepeatable } from 'https://unpkg.com/@aarongustafson/form-repeatable@latest/define.js?module';

@@ -16,7 +16,7 @@
  * @csspart group - Container for each field group and its controls (default: subgrid spanning both columns)
  * @csspart content - The container for the group's fields (default: column 1)
  * @csspart group-controls - The container for group-level control buttons (default: column 2, remove button)
- * @csspart controls - The container for field-level control buttons (default: add button below groups)
+ * @csspart controls - Shared part on the main Add container and per-group control containers
  * @csspart button - Both buttons (use ::part(button) to style all buttons)
  * @csspart add-button - The "Add Another" button
  * @csspart remove-button - The "Remove" button
@@ -132,8 +132,15 @@ export class FormRepeatableElement extends HTMLElement {
 
 		if (!this._listenersInitialized) {
 			this.shadowRoot.addEventListener('click', this._handleShadowClick);
-			this.addEventListener('input', this._handleFormInteraction);
-			this.addEventListener('change', this._handleFormInteraction);
+			// Native change events may not cross the shadow boundary.
+			this.shadowRoot.addEventListener(
+				'input',
+				this._handleFormInteraction,
+			);
+			this.shadowRoot.addEventListener(
+				'change',
+				this._handleFormInteraction,
+			);
 			this._listenersInitialized = true;
 		}
 	}
@@ -143,8 +150,14 @@ export class FormRepeatableElement extends HTMLElement {
 			return;
 		}
 		this.shadowRoot.removeEventListener('click', this._handleShadowClick);
-		this.removeEventListener('input', this._handleFormInteraction);
-		this.removeEventListener('change', this._handleFormInteraction);
+		this.shadowRoot.removeEventListener(
+			'input',
+			this._handleFormInteraction,
+		);
+		this.shadowRoot.removeEventListener(
+			'change',
+			this._handleFormInteraction,
+		);
 		this._listenersInitialized = false;
 	}
 
@@ -191,14 +204,14 @@ export class FormRepeatableElement extends HTMLElement {
 		}
 		if (target.classList.contains('add')) {
 			event.preventDefault();
-			this._addGroup();
+			this._addGroup(target);
 			return;
 		}
 		if (target.classList.contains('remove')) {
 			event.preventDefault();
 			const groupId = parseInt(target.dataset.groupId || '', 10);
 			if (!Number.isNaN(groupId)) {
-				this._removeGroup(groupId);
+				this._removeGroup(groupId, target);
 			}
 		}
 	}
@@ -373,7 +386,7 @@ export class FormRepeatableElement extends HTMLElement {
 	}
 
 	// Add a new group
-	_addGroup() {
+	_addGroup(focusedElement) {
 		if (this.max !== null && this._groups.length >= this.max) {
 			return;
 		}
@@ -398,7 +411,7 @@ export class FormRepeatableElement extends HTMLElement {
 		};
 
 		this._groups.push(group);
-		this._render();
+		this._render(focusedElement);
 		this._updateFormValue();
 
 		this.dispatchEvent(
@@ -429,7 +442,7 @@ export class FormRepeatableElement extends HTMLElement {
 	}
 
 	// Remove a group
-	_removeGroup(groupId) {
+	_removeGroup(groupId, focusedElement) {
 		const index = this._groups.findIndex((g) => g.id === groupId);
 		if (index === -1) return;
 
@@ -442,7 +455,7 @@ export class FormRepeatableElement extends HTMLElement {
 		// Renumber remaining groups
 		this._renumberGroups();
 
-		this._render();
+		this._render(focusedElement);
 		this._updateFormValue();
 
 		this.dispatchEvent(
@@ -519,7 +532,12 @@ export class FormRepeatableElement extends HTMLElement {
 	}
 
 	// Render the shadow DOM
-	_render() {
+	_render(focusedElement = this.shadowRoot.activeElement) {
+		const focusedGroupIndex = focusedElement
+			? Array.from(
+					this.shadowRoot.querySelectorAll('[part="group"]'),
+				).findIndex((group) => group.contains(focusedElement))
+			: -1;
 		const canAdd = this.max === null || this._groups.length < this.max;
 		const canRemove = this._groups.length > this.min;
 
@@ -595,6 +613,25 @@ export class FormRepeatableElement extends HTMLElement {
 				groupContainer.querySelector('[part="content"]');
 			contentContainer.appendChild(group.element);
 		});
+
+		if (focusedElement) {
+			let target = focusedElement;
+			if (!this.shadowRoot.contains(target)) {
+				const add = this.shadowRoot.querySelector('button.add');
+				const removes = Array.from(
+					this.shadowRoot.querySelectorAll('button.remove'),
+				);
+				target = focusedElement.matches('button.add')
+					? add || removes.at(-1)
+					: removes[
+							Math.min(
+								Math.max(focusedGroupIndex, 0),
+								removes.length - 1,
+							)
+						] || add;
+			}
+			target?.focus();
+		}
 	}
 
 	// Get accessible label for remove button

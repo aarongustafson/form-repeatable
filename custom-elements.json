@@ -1,6 +1,6 @@
 {
 	"schemaVersion": "1.0.0",
-	"readme": "",
+	"readme": "README.md",
 	"modules": [
 		{
 			"kind": "javascript-module",
@@ -8,11 +8,138 @@
 			"declarations": [
 				{
 					"kind": "class",
-					"description": "A web component that enables you to control the duplication of fields.",
+					"description": "Manages repeatable groups in an open shadow root with native ElementInternals form participation. Adopts a cached snapshot of accessible page stylesheets; does not inject a color palette.",
 					"name": "FormRepeatableElement",
-					"members": [],
-					"events": [],
-					"attributes": [],
+					"members": [
+						{
+							"kind": "field",
+							"name": "formAssociated",
+							"static": true,
+							"type": { "text": "boolean" },
+							"default": "true"
+						},
+						{
+							"kind": "field",
+							"name": "addLabel",
+							"attribute": "add-label",
+							"type": { "text": "string" }
+						},
+						{
+							"kind": "field",
+							"name": "removeLabel",
+							"attribute": "remove-label",
+							"type": { "text": "string" }
+						},
+						{
+							"kind": "field",
+							"name": "min",
+							"attribute": "min",
+							"type": { "text": "number" }
+						},
+						{
+							"kind": "field",
+							"name": "max",
+							"attribute": "max",
+							"type": { "text": "number | null" }
+						},
+						{
+							"kind": "method",
+							"name": "resetGlobalStyles",
+							"static": true,
+							"description": "Clears the page-stylesheet cache for future instances; existing shadow roots are not refreshed.",
+							"return": { "type": { "text": "void" } }
+						},
+						{
+							"kind": "method",
+							"name": "formResetCallback",
+							"description": "Restores field defaults and synchronizes the form value.",
+							"return": { "type": { "text": "void" } }
+						},
+						{
+							"kind": "method",
+							"name": "formDisabledCallback",
+							"parameters": [
+								{
+									"name": "disabled",
+									"type": { "text": "boolean" }
+								}
+							],
+							"description": "Updates the disabled state of fields and generated buttons.",
+							"return": { "type": { "text": "void" } }
+						}
+					],
+					"events": [
+						{
+							"name": "form-repeatable:added",
+							"type": { "text": "CustomEvent" },
+							"description": "Bubbling, composed event after adding a group. Detail contains group and groupCount."
+						},
+						{
+							"name": "form-repeatable:removed",
+							"type": { "text": "CustomEvent" },
+							"description": "Bubbling, composed event after removing a group. Detail contains the removed group and remaining groupCount."
+						}
+					],
+					"attributes": [
+						{
+							"name": "add-label",
+							"type": { "text": "string" },
+							"default": "\"Add Another\"",
+							"description": "Visible Add button label."
+						},
+						{
+							"name": "remove-label",
+							"type": { "text": "string" },
+							"default": "\"Remove\"",
+							"description": "Visible Remove label, also combined with the group's first label or legend to name its action."
+						},
+						{
+							"name": "min",
+							"type": { "text": "number" },
+							"default": "1",
+							"description": "Positive integer minimum. Remove buttons are hidden at or below it; initial groups are not padded to meet it. Invalid values warn and fall back to 1."
+						},
+						{
+							"name": "max",
+							"type": { "text": "number | null" },
+							"default": "null",
+							"description": "Optional parsed integer limit greater than min. Add is hidden at that limit; unparseable or too-small limits warn and are ignored."
+						}
+					],
+					"cssParts": [
+						{
+							"name": "groups",
+							"description": "Grid containing every group."
+						},
+						{
+							"name": "group",
+							"description": "Group wrapper using subgrid across both columns."
+						},
+						{
+							"name": "content",
+							"description": "Authored fields in the first column."
+						},
+						{
+							"name": "group-controls",
+							"description": "Per-group Remove controls in the second column."
+						},
+						{
+							"name": "controls",
+							"description": "Shared part on the main Add container and per-group control containers."
+						},
+						{
+							"name": "button",
+							"description": "Both native Add and Remove buttons."
+						},
+						{
+							"name": "add-button",
+							"description": "Native Add button."
+						},
+						{
+							"name": "remove-button",
+							"description": "Native Remove buttons with contextual accessible names."
+						}
+					],
 					"superclass": {
 						"name": "HTMLElement"
 					},
@@ -27,6 +154,38 @@
 					"declaration": {
 						"name": "FormRepeatableElement",
 						"module": "form-repeatable.js"
+					}
+				}
+			]
+		},
+		{
+			"kind": "javascript-module",
+			"path": "define.js",
+			"declarations": [
+				{
+					"kind": "function",
+					"name": "defineFormRepeatable",
+					"description": "Guarded registration helper. Importing this module also attempts automatic registration.",
+					"parameters": [
+						{
+							"name": "tagName",
+							"type": { "text": "string" },
+							"default": "\"form-repeatable\""
+						}
+					],
+					"return": {
+						"type": { "text": "boolean" },
+						"description": "False without a usable registry; true if defined or already registered."
+					}
+				}
+			],
+			"exports": [
+				{
+					"kind": "js",
+					"name": "defineFormRepeatable",
+					"declaration": {
+						"name": "defineFormRepeatable",
+						"module": "define.js"
 					}
 				}
 			]

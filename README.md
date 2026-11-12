@@ -14,7 +14,7 @@ A single-instance web component that manages repeatable form field groups intern
 - 🌍 **Global styles** - automatically adopts page stylesheets into shadow DOM
 - 🎯 **Modern CSS Grid layout** - default 2-column layout with subgrid support
 - 📦 **Zero dependencies** - pure web component
-- ♿ **Accessible** - semantic HTML with proper ARIA labels
+- **Native controls** - labeled fields and text buttons with contextual Remove names
 - 🎯 **TypeScript-ready** with type definitions
 
 ## TypeScript & Framework Support
@@ -59,7 +59,8 @@ Use the guarded definition helper to register the element when `customElements` 
 import '@aarongustafson/form-repeatable/define.js';
 ```
 
-If you prefer to control when the element is registered, call the helper directly:
+Importing the helper also attempts automatic registration. Calling it again is
+safe; use the class-only import above if you need to control registration timing:
 
 ```javascript
 import { defineFormRepeatable } from '@aarongustafson/form-repeatable/define.js';
@@ -70,7 +71,10 @@ defineFormRepeatable();
 You can also include the guarded script from HTML:
 
 ```html
-<script src="./node_modules/@aarongustafson/form-repeatable/define.js" type="module"></script>
+<script
+  src="./node_modules/@aarongustafson/form-repeatable/define.js"
+  type="module"
+></script>
 ```
 
 ### Basic Example
@@ -80,13 +84,14 @@ You can also include the guarded script from HTML:
   <form-repeatable>
     <div>
       <label for="stop-1">Stop 1</label>
-      <input id="stop-1" type="text" name="stops[]">
+      <input id="stop-1" type="text" name="stops[]" />
     </div>
   </form-repeatable>
 </form>
 ```
 
 The component uses the first child as a template. When the user clicks "Add Another":
+
 1. Clones the template
 2. Increments numbers ("Stop 1" → "Stop 2", `stop-1` → `stop-2`)
 3. Appends the new group to the shadow DOM
@@ -102,15 +107,15 @@ You can provide multiple initial groups that will be moved into the shadow DOM:
   <form-repeatable min="2">
     <div>
       <label for="phone-1">Phone 1</label>
-      <input id="phone-1" type="tel" name="phones[]" value="555-0100">
+      <input id="phone-1" type="tel" name="phones[]" value="555-0100" />
     </div>
     <div>
       <label for="phone-2">Phone 2</label>
-      <input id="phone-2" type="tel" name="phones[]" value="555-0101">
+      <input id="phone-2" type="tel" name="phones[]" value="555-0101" />
     </div>
     <div>
       <label for="phone-3">Phone 3</label>
-      <input id="phone-3" type="tel" name="phones[]">
+      <input id="phone-3" type="tel" name="phones[]" />
     </div>
   </form-repeatable>
 </form>
@@ -127,10 +132,10 @@ Each group can contain multiple related fields:
   <fieldset>
     <legend>Guest 1</legend>
     <label for="guest-name-1">Name</label>
-    <input id="guest-name-1" type="text" name="guest-name-1">
+    <input id="guest-name-1" type="text" name="guest-name-1" />
 
     <label for="guest-email-1">Email</label>
-    <input id="guest-email-1" type="email" name="guest-email-1">
+    <input id="guest-email-1" type="email" name="guest-email-1" />
   </fieldset>
 </form-repeatable>
 ```
@@ -146,7 +151,7 @@ Instead of using the first child as a template, you can provide an explicit `<te
   <template>
     <div>
       <label for="email-{n}">Email {n}</label>
-      <input id="email-{n}" type="email" name="emails[]">
+      <input id="email-{n}" type="email" name="emails[]" />
     </div>
   </template>
 </form-repeatable>
@@ -154,27 +159,37 @@ Instead of using the first child as a template, you can provide an explicit `<te
 
 The `{n}` placeholders are replaced with sequential numbers (1, 2, 3, etc.).
 
+An explicit template is inert without JavaScript. Supply authored initial
+groups instead when the page needs usable fields before enhancement or after a
+module-loading failure.
+
 ## Attributes
 
-| Attribute | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `add-label` | `string` | `"Add Another"` | Custom label for the "Add" button |
-| `remove-label` | `string` | `"Remove"` | Custom label for the "Remove" button. The accessible name (`aria-label`) is automatically composed by combining this with the first label/legend text (e.g., "Remove Stop 1"). |
-| `min` | `number` | `1` | Minimum number of groups (must be > 0). Remove buttons are hidden when at minimum. |
-| `max` | `number` | `null` | Maximum number of groups (optional, must be > min). Add button is hidden when at maximum. |
+| Attribute      | Type     | Default         | Description                                                                                                                                                                    |
+| -------------- | -------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `add-label`    | `string` | `"Add Another"` | Custom label for the "Add" button                                                                                                                                              |
+| `remove-label` | `string` | `"Remove"`      | Custom label for the "Remove" button. The accessible name (`aria-label`) is automatically composed by combining this with the first label/legend text (e.g., "Remove Stop 1"). |
+| `min`          | `number` | `1`             | Minimum number of groups (must be > 0). Remove buttons are hidden when at minimum.                                                                                             |
+| `max`          | `number` | `null`          | Maximum number of groups (optional, must be > min). Add button is hidden when at maximum.                                                                                      |
 
 ### Example with Min/Max Constraints
 
 ```html
-<form-repeatable min="2" max="5" add-label="Add Team Member" remove-label="Remove Member">
+<form-repeatable
+  min="2"
+  max="5"
+  add-label="Add Team Member"
+  remove-label="Remove Member"
+>
   <div>
     <label for="member-1">Team Member 1</label>
-    <input id="member-1" type="text" name="members[]">
+    <input id="member-1" type="text" name="members[]" />
   </div>
 </form-repeatable>
 ```
 
 This creates a component that:
+
 - Starts with 1 group (will allow adding until min is met)
 - Cannot have fewer than 2 groups
 - Cannot have more than 5 groups
@@ -184,10 +199,10 @@ This creates a component that:
 
 The component fires custom events that you can listen to:
 
-| Event | Description | Detail |
-|-------|-------------|--------|
-| `form-repeatable:added` | Fired when a new group is added | `{ group: Object, groupCount: number }` |
-| `form-repeatable:removed` | Fired when a group is removed | `{ group: Object, groupCount: number }` |
+| Event                     | Description                     | Detail                                  |
+| ------------------------- | ------------------------------- | --------------------------------------- |
+| `form-repeatable:added`   | Fired when a new group is added | `{ group: Object, groupCount: number }` |
+| `form-repeatable:removed` | Fired when a group is removed   | `{ group: Object, groupCount: number }` |
 
 ### Example Event Handling
 
@@ -207,16 +222,16 @@ repeatable.addEventListener('form-repeatable:removed', (event) => {
 
 The component exposes CSS parts that allow you to style internal shadow DOM elements:
 
-| Part | Description |
-|------|-------------|
-| `groups` | Container for all groups (default: CSS grid with 2-column layout) |
-| `group` | Each repeatable group wrapper (default: subgrid spanning both columns) |
-| `content` | Container for the group's fields (default: column 1) |
-| `group-controls` | Container for group-level controls, remove button (default: column 2) |
-| `controls` | Container for field-level controls, add button (default: below groups) |
-| `button` | Both buttons (style all buttons together) |
-| `add-button` | The "Add Another" button |
-| `remove-button` | The "Remove" buttons |
+| Part             | Description                                                               |
+| ---------------- | ------------------------------------------------------------------------- |
+| `groups`         | Container for all groups (default: CSS grid with 2-column layout)         |
+| `group`          | Each repeatable group wrapper (default: subgrid spanning both columns)    |
+| `content`        | Container for the group's fields (default: column 1)                      |
+| `group-controls` | Container for group-level controls, remove button (default: column 2)     |
+| `controls`       | Shared control containers: the main Add area and each group’s Remove area |
+| `button`         | Both buttons (style all buttons together)                                 |
+| `add-button`     | The "Add Another" button                                                  |
+| `remove-button`  | The "Remove" buttons                                                      |
 
 ### Example Styling
 
@@ -225,31 +240,36 @@ The component exposes CSS parts that allow you to style internal shadow DOM elem
 form-repeatable::part(button) {
   padding: 0.5rem 1rem;
   font-weight: bold;
-  border: none;
+  border: 1px solid currentColor;
   border-radius: 4px;
   cursor: pointer;
 }
 
 /* Style the add button specifically */
 form-repeatable::part(add-button) {
-  background: #28a745;
-  color: white;
+  background: #17652e;
+  color: #fff;
 }
 
 form-repeatable::part(add-button):hover {
-  background: #218838;
+  background: #114b22;
 }
 
 /* Style the remove button specifically */
 form-repeatable::part(remove-button) {
-  background: #dc3545;
-  color: white;
+  background: #982b39;
+  color: #fff;
+}
+
+form-repeatable::part(remove-button):hover {
+  background: #761f2c;
 }
 
 /* Style each group */
 form-repeatable::part(group) {
   padding: 1rem;
-  background: #f8f9fa;
+  background: Canvas;
+  color: CanvasText;
   border-radius: 4px;
   margin-bottom: 0.5rem;
 }
@@ -272,7 +292,48 @@ The component uses a **CSS Grid layout** by default:
 - **Below groups**: Add button appears after all groups
 - **Global styles**: Page stylesheets are automatically adopted into the shadow DOM
 
+The component does not inject a color palette. Without authored overrides,
+fields and buttons use their browser defaults. Adopted page styles and
+`::part()` rules can change them, so pair each foreground with its painted
+background in resting, hover, and focus states. The example above uses tested
+green/red pairs, visible action labels, and foreground-colored boundaries;
+color is supplementary.
+
+Keep the native focus indicator unless you provide an equally visible
+replacement. Do not fade focused or hovered controls with opacity, and leave
+automatic forced-color adjustment enabled.
+
+When controls rebuild, a focused field that remains keeps focus and its value.
+Activating Add keeps focus on its replacement button; at the maximum, focus
+moves to the last Remove button instead. Removing a group focuses the next
+Remove action, or the previous one when deleting the last group. If no Remove
+buttons remain, focus returns to Add. Native focus scrolling keeps the action
+in view.
+
 You can override the grid layout using `::part(groups)` as shown above.
+
+The demos stack fields and Remove controls below 600px so text fields retain
+usable width. This is authored demo CSS, not a change to the component’s grid:
+
+```css
+@media (max-width: 600px) {
+  form-repeatable::part(groups) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  form-repeatable::part(group) {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.5rem;
+  }
+
+  form-repeatable::part(button) {
+    max-inline-size: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+```
 
 ### Advanced Styling
 
@@ -282,10 +343,19 @@ The component uses Shadow DOM with adopted stylesheets. You can style it using:
 2. **Global stylesheets** - automatically adopted into shadow DOM, so page styles apply
 3. **Host element** - style the component container itself
 
+The stylesheet snapshot is cached when the first instance is constructed.
+Inaccessible cross-origin sheets are skipped with a debug message. Later page
+stylesheet changes are not automatically copied into existing instances.
+`FormRepeatableElement.resetGlobalStyles()` clears the snapshot for future
+instances; it does not refresh existing shadow roots. Prefer `::part()` for
+live author overrides.
+
 ```css
 /* Style the host element */
 form-repeatable {
   display: block;
+  background: Canvas;
+  color: CanvasText;
   margin-bottom: 2rem;
 }
 
@@ -295,7 +365,9 @@ select,
 textarea {
   width: 100%;
   padding: 0.5rem;
-  border: 1px solid #ccc;
+  background: Field;
+  color: FieldText;
+  border: 1px solid FieldText;
   border-radius: 4px;
 }
 
@@ -311,6 +383,7 @@ label {
 This component uses the **ElementInternals API** for native form participation:
 
 - **Automatic submission**: All inputs within groups are collected and submitted with the form
+- **Value synchronization**: Input/change listeners inside the shadow root update FormData as fields change, including non-composed change events. Listeners are removed on disconnect.
 - **FormData integration**: Values are added to FormData automatically
 - **Form reset**: Supports native form reset functionality
 - **Disabled state**: Respects form disabled state
@@ -333,6 +406,7 @@ The component uses a **single-instance architecture**:
 ## Browser Support
 
 This component uses modern web standards:
+
 - Custom Elements v1
 - Shadow DOM v1
 - ElementInternals API
@@ -341,6 +415,7 @@ This component uses modern web standards:
 - ES Modules
 
 **Supported browsers:**
+
 - Chrome/Edge 117+ (for subgrid support)
 - Firefox 71+ (for subgrid support)
 - Safari 16.4+ (for ElementInternals support)
@@ -362,6 +437,10 @@ npm run test:ui
 # Run tests with coverage
 npm run test:coverage
 
+# Run browser behavior and color checks
+npx playwright install
+npm run test:browser
+
 # Lint code
 npm run lint
 
@@ -371,6 +450,12 @@ npm run format
 # View demo
 open demo/index.html
 ```
+
+The browser suite uses Chromium, Firefox, and WebKit. It checks generated
+controls, adopted styles, native FormData, fallback fields, and the study’s
+19 distinct palettes. Palette substitution and forced-color emulation do not
+replace testing real user color settings, zoom, keyboard operation, and
+assistive technology.
 
 ## License
 

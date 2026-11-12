@@ -15,6 +15,7 @@
 				margin-top: 1rem;
 				padding: 1rem;
 				background-color: Field;
+				color: FieldText;
 				border-radius: 4px;
 				font-family: monospace;
 				font-size: 0.875rem;
@@ -34,20 +35,36 @@
 				white-space: pre-wrap;
 			}
 
-			form-repeatable.custom::part(add-button) {
-				background-color: green;
-				color: white;
+			form-repeatable.custom::part(button) {
+				border: 1px solid currentColor;
+				padding: 0.5rem 1rem;
+				border-radius: 4px;
 			}
-			form-repeatable.custom::part(add-button)::before {
-				content: '+ '/ '';
+
+			form-repeatable.custom::part(add-button) {
+				background: #17652e;
+				color: #fff;
+			}
+
+			form-repeatable.custom::part(add-button):hover {
+				background: #114b22;
 			}
 
 			form-repeatable.custom::part(remove-button) {
-				background-color: red;
-				color: white;
+				background: #982b39;
+				color: #fff;
 			}
-			form-repeatable.custom::part(remove-button)::before {
-				content: '− ' / '';
+
+			form-repeatable.custom::part(remove-button):hover {
+				background: #761f2c;
+			}
+
+			form-repeatable.custom::part(group) {
+				padding: 1rem;
+				background: Canvas;
+				color: CanvasText;
+				border-radius: 4px;
+				margin-bottom: 0.5rem;
 			}
 
 			.info-box {
@@ -68,15 +85,19 @@
 				fields with native form participation using ElementInternals.
 				Single-instance architecture manages all groups internally. See
 				the
-				<a
-					href="../"
-					>README</a
-				>
+				<a href="../">README</a>
 				for installation and API documentation.
 			</p>
 		</header>
 
 		<main>
+			<p>
+				Use the labeled fields and Add/Remove text buttons. Without
+				JavaScript or after a module-loading failure, authored initial
+				fields retain their labels and values. Explicit templates are
+				inert until enhancement; use initial groups when a native
+				fallback is needed.
+			</p>
 			<!-- Basic Example -->
 			<section>
 				<h2>Basic Example</h2>
@@ -550,7 +571,7 @@
     console.log('Added:', e.detail.groupCount);
   <mark>});</mark>
 
-  <mark>repeatable.addEventLinpx servetener(
+  <mark>repeatable.addEventListener(
     'form-repeatable:removed', (e) =&gt; {</mark>
     console.log('Removed:', e.detail.groupCount);
   <mark>});</mark>
@@ -595,28 +616,45 @@
 					<h3>Styled Buttons</h3>
 					<p>
 						This example uses <code>::part()</code> selectors to
-						customize button appearance.
+						customize button appearance. Both actions keep text
+						labels and native focus; color is supplementary.
 					</p>
 					<div class="code-demo-pair">
 						<pre><code>&lt;style&gt;
-  form-repeatable<mark>::part(add-button)</mark> {
-    background: green;
-    color: white;
+  form-repeatable.custom<mark>::part(button)</mark> {
+    border: 1px solid currentColor;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
   }
 
-  form-repeatable<mark>::part(remove-button)</mark> {
-    background: red;
-    color: white;
+  form-repeatable.custom<mark>::part(add-button)</mark> {
+    background: #17652e;
+    color: #fff;
   }
 
-  form-repeatable<mark>::part(group)</mark> {
+  form-repeatable.custom::part(add-button):hover {
+    background: #114b22;
+  }
+
+  form-repeatable.custom<mark>::part(remove-button)</mark> {
+    background: #982b39;
+    color: #fff;
+  }
+
+  form-repeatable.custom::part(remove-button):hover {
+    background: #761f2c;
+  }
+
+  form-repeatable.custom<mark>::part(group)</mark> {
     padding: 1rem;
-    background: #f5f5f5;
+    background: Canvas;
+    color: CanvasText;
+    border-radius: 4px;
     margin-bottom: 0.5rem;
   }
 &lt;/style&gt;
 
-&lt;form-repeatable&gt;
+&lt;form-repeatable class="custom"&gt;
   &lt;div&gt;
     &lt;label for="task-1"&gt;Task 1&lt;/label&gt;
     &lt;input id="task-1" type="text"
@@ -624,49 +662,10 @@
   &lt;/div&gt;
 &lt;/form-repeatable&gt;</code></pre>
 						<div class="demo">
-							<style>
-								#styled-form form-repeatable::part(add-button) {
-									background-color: green;
-									color: white;
-									border: none;
-									padding: 0.5rem 1rem;
-									border-radius: 4px;
-									cursor: pointer;
-								}
-
-								#styled-form
-									form-repeatable::part(add-button):hover {
-									background: darkgreen;
-									color: white;
-								}
-
-								#styled-form
-									form-repeatable::part(remove-button) {
-									background: red;
-									color: white;
-									border: none;
-									padding: 0.5rem 1rem;
-									border-radius: 4px;
-									cursor: pointer;
-								}
-
-								#styled-form
-									form-repeatable::part(remove-button):hover {
-									background: darkred;
-								}
-
-								#styled-form form-repeatable::part(group) {
-									padding: 1rem;
-									background: #f5f5f5;
-									color: black;
-									border-radius: 4px;
-									margin-bottom: 0.5rem;
-								}
-							</style>
 							<form id="styled-form">
 								<fieldset>
 									<legend>Styled Example</legend>
-									<form-repeatable>
+									<form-repeatable class="custom">
 										<div>
 											<label for="task-1">Task 1</label>
 											<input
@@ -897,8 +896,8 @@
 						group-level controls, remove button (default: column 2).
 					</li>
 					<li>
-						<code>::part(controls)</code> - Container for main
-						controls, add button (default: below groups).
+						<code>::part(controls)</code> - Container for main and
+						per-group controls.
 					</li>
 					<li><code>::part(add-button)</code> - The add button.</li>
 					<li>
@@ -948,10 +947,7 @@
 
 				<p>
 					For complete documentation, see the
-					<a
-						href="../"
-						>README</a
-					>.
+					<a href="../">README</a>.
 				</p>
 			</section>
 		</main>
@@ -992,7 +988,11 @@
 					}
 				}
 
-				output.innerHTML = `<h4>FormData Contents:</h4><pre>${JSON.stringify(data, null, 2)}</pre>`;
+				const heading = document.createElement('h4');
+				heading.textContent = 'FormData Contents:';
+				const contents = document.createElement('pre');
+				contents.textContent = JSON.stringify(data, null, 2);
+				output.replaceChildren(heading, contents);
 			}
 
 			// Form participation example
