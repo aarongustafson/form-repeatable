@@ -312,6 +312,29 @@ in view.
 
 You can override the grid layout using `::part(groups)` as shown above.
 
+The demos stack fields and Remove controls below 600px so text fields retain
+usable width. This is authored demo CSS, not a change to the component’s grid:
+
+```css
+@media (max-width: 600px) {
+  form-repeatable::part(groups) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  form-repeatable::part(group) {
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.5rem;
+  }
+
+  form-repeatable::part(button) {
+    max-inline-size: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+```
+
 ### Advanced Styling
 
 The component uses Shadow DOM with adopted stylesheets. You can style it using:

@@ -144,6 +144,24 @@ footer {
 	min-width: 0;
 }
 
+@media (max-width: 600px) {
+	form-repeatable::part(groups) {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	form-repeatable::part(group) {
+		grid-column: 1 / -1;
+		grid-template-columns: minmax(0, 1fr);
+		row-gap: 0.5rem;
+	}
+
+	form-repeatable::part(button) {
+		max-inline-size: 100%;
+		white-space: normal;
+		overflow-wrap: anywhere;
+	}
+}
+
 @media (min-width: 768px) {
 	.code-demo-pair {
 		flex-direction: row;

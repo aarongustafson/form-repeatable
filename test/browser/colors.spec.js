@@ -476,6 +476,23 @@ test('increased contrast retains full-strength supporting text', async ({
 	await expect(page.locator('footer')).toHaveCSS('color', color);
 });
 
+test('narrow custom groups give fields usable width and place Remove below them', async ({
+	page,
+}) => {
+	await page.setViewportSize({ width: 320, height: 900 });
+	await demo(page);
+	const host = page.locator('#styled-form form-repeatable');
+	await host
+		.getByRole('button', { name: 'Add Another', exact: true })
+		.click();
+	for (const group of await host.locator('[part="group"]').all()) {
+		const field = await group.getByRole('textbox').boundingBox();
+		const remove = await group.getByRole('button').boundingBox();
+		expect(field.width).toBeGreaterThanOrEqual(120);
+		expect(remove.y).toBeGreaterThanOrEqual(field.y + field.height);
+	}
+});
+
 for (const name of ['index.html', 'esm.html', 'unpkg.html']) {
 	test(`${name}: code/live pairs and added groups reflow`, async ({
 		page,
