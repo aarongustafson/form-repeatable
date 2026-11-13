@@ -1,6 +1,10 @@
 # form-repeatable Web Component
 
-[![npm version](https://img.shields.io/npm/v/@aarongustafson/form-repeatable.svg)](https://www.npmjs.com/package/@aarongustafson/form-repeatable) [![Build Status](https://img.shields.io/github/actions/workflow/status/aarongustafson/form-repeatable/ci.yml?branch=main)](https://github.com/aarongustafson/form-repeatable/actions)
+[![npm version](https://img.shields.io/npm/v/@aarongustafson/form-repeatable.svg)](https://www.npmjs.com/package/@aarongustafson/form-repeatable)
+[![CI status](https://img.shields.io/github/actions/workflow/status/aarongustafson/form-repeatable/ci.yml?branch=main&label=CI)](https://github.com/aarongustafson/form-repeatable/actions/workflows/ci.yml)
+[![Minified + gzipped size](https://img.shields.io/bundlejs/size/@aarongustafson/form-repeatable?format=minzip&label=min%2Bgzip)](https://bundlejs.com/?q=@aarongustafson/form-repeatable)
+[![License](https://img.shields.io/npm/l/@aarongustafson/form-repeatable)](https://github.com/aarongustafson/form-repeatable/blob/main/LICENSE)
+[![Type definitions](https://img.shields.io/npm/types/@aarongustafson/form-repeatable)](https://github.com/aarongustafson/form-repeatable/blob/main/form-repeatable.d.ts)
 
 A single-instance web component that manages repeatable form field groups internally using shadow DOM and native form participation via the ElementInternals API.
 
