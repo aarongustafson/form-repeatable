@@ -26,21 +26,21 @@
 				</p>
 				<div class="code-demo-pair">
 					<pre><code>&lt;form&gt;
-  &lt;form-repeatable
+  <mark>&lt;form-repeatable
     max="3"
     add-label="Add email"
-    remove-label="Remove email"&gt;
+    remove-label="Remove email"&gt;</mark>
     &lt;div&gt;
       &lt;label for="email-1"&gt;Email 1&lt;/label&gt;
       &lt;input id="email-1" type="email" name="emails[]" /&gt;
     &lt;/div&gt;
-  &lt;/form-repeatable&gt;
+  <mark>&lt;/form-repeatable&gt;</mark>
 &lt;/form&gt;
 
 &lt;script type="module"&gt;
-  import { defineFormRepeatable } from 'https://unpkg.com/@aarongustafson/form-repeatable@latest/define.js?module';
+  <mark>import { defineFormRepeatable } from 'https://unpkg.com/@aarongustafson/form-repeatable@latest/define.js?module';</mark>
 
-  defineFormRepeatable();
+  <mark>defineFormRepeatable();</mark>
 &lt;/script&gt;</code></pre>
 					<div class="demo">
 						<form>

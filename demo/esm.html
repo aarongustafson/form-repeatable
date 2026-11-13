@@ -26,20 +26,20 @@
 				</p>
 				<div class="code-demo-pair">
 					<pre><code>&lt;form&gt;
-  &lt;form-repeatable&gt;
+  <mark>&lt;form-repeatable&gt;</mark>
     &lt;div&gt;
       &lt;label for="email-1"&gt;Email 1&lt;/label&gt;
       &lt;input id="email-1" type="email" name="emails[]" /&gt;
     &lt;/div&gt;
-  &lt;/form-repeatable&gt;
+  <mark>&lt;/form-repeatable&gt;</mark>
 &lt;/form&gt;
 
 &lt;script type="module"&gt;
-  import { FormRepeatableElement } from 'https://esm.sh/@aarongustafson/form-repeatable@1.2.2/form-repeatable.js?bundle&amp;target=es2022';
+  <mark>import { FormRepeatableElement } from 'https://esm.sh/@aarongustafson/form-repeatable@1.2.2/form-repeatable.js?bundle&amp;target=es2022';</mark>
 
-  if (!customElements.get('form-repeatable')) {
+  <mark>if (!customElements.get('form-repeatable')) {
     customElements.define('form-repeatable', FormRepeatableElement);
-  }
+  }</mark>
 &lt;/script&gt;</code></pre>
 					<div class="demo">
 						<form>
