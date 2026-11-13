@@ -115,14 +115,14 @@
 					</p>
 					<div class="code-demo-pair">
 						<pre><code>&lt;form&gt;
-  &lt;form-repeatable&gt;
+  <mark>&lt;form-repeatable&gt;</mark>
     &lt;div&gt;
       &lt;label for="stop-1"&gt;Stop 1&lt;/label&gt;
       &lt;input id="stop-1" type="text"
              name="stops[]"
              placeholder="Enter location"&gt;
     &lt;/div&gt;
-  &lt;/form-repeatable&gt;
+  <mark>&lt;/form-repeatable&gt;</mark>
 &lt;/form&gt;</code></pre>
 						<div class="demo">
 							<form id="basic-form">
@@ -161,7 +161,7 @@
 						recognizes them all and allows adding/removing.
 					</p>
 					<div class="code-demo-pair">
-						<pre><code>&lt;form-repeatable&gt;
+						<pre><code><mark>&lt;form-repeatable&gt;</mark>
   &lt;div&gt;
     &lt;label for="phone-1"&gt;Phone 1&lt;/label&gt;
     &lt;input id="phone-1" type="tel"
@@ -180,7 +180,7 @@
            name="phones[]"
            value="555-0102"&gt;
   &lt;/div&gt;
-&lt;/form-repeatable&gt;</code></pre>
+<mark>&lt;/form-repeatable&gt;</mark></code></pre>
 						<div class="demo">
 							<form id="prepopulated-form">
 								<fieldset>
@@ -301,7 +301,7 @@
 						for numbers.
 					</p>
 					<div class="code-demo-pair">
-						<pre><code>&lt;form-repeatable&gt;
+						<pre><code><mark>&lt;form-repeatable&gt;</mark>
   <mark>&lt;template&gt;</mark>
     &lt;div&gt;
       &lt;label for="email-<mark>{n}</mark>"&gt;Email <mark>{n}</mark>&lt;/label&gt;
@@ -311,7 +311,7 @@
              placeholder="user@example.com"&gt;
     &lt;/div&gt;
   <mark>&lt;/template&gt;</mark>
-&lt;/form-repeatable&gt;</code></pre>
+<mark>&lt;/form-repeatable&gt;</mark></code></pre>
 						<div class="demo">
 							<form id="template-form">
 								<fieldset>
@@ -351,7 +351,7 @@
 					<h3>Guest Information</h3>
 					<p>Add guests with name and dietary requirements.</p>
 					<div class="code-demo-pair">
-						<pre><code>&lt;form-repeatable&gt;
+						<pre><code><mark>&lt;form-repeatable&gt;</mark>
   &lt;fieldset&gt;
     &lt;legend&gt;Guest 1&lt;/legend&gt;
     &lt;label for="guest-1"&gt;Name 1&lt;/label&gt;
@@ -366,7 +366,7 @@
       &lt;option value="gluten-free"&gt;Gluten Free&lt;/option&gt;
     &lt;/select&gt;
   &lt;/fieldset&gt;
-&lt;/form-repeatable&gt;</code></pre>
+<mark>&lt;/form-repeatable&gt;</mark></code></pre>
 						<div class="demo">
 							<form id="multiple-form">
 								<fieldset>
@@ -463,7 +463,7 @@
 					<h3>Education History</h3>
 					<p>Using a fieldset as the repeating container.</p>
 					<div class="code-demo-pair">
-						<pre><code>&lt;form-repeatable&gt;
+						<pre><code><mark>&lt;form-repeatable&gt;</mark>
   <mark>&lt;fieldset&gt;</mark>
     &lt;legend&gt;School 1&lt;/legend&gt;
     &lt;label for="school-1"&gt;Institution 1&lt;/label&gt;
@@ -481,7 +481,7 @@
     &lt;textarea id="notes-1"
               name="notes[]"&gt;&lt;/textarea&gt;
   <mark>&lt;/fieldset&gt;</mark>
-&lt;/form-repeatable&gt;</code></pre>
+<mark>&lt;/form-repeatable&gt;</mark></code></pre>
 						<div class="demo">
 							<form id="input-types-form">
 								<fieldset>
@@ -654,13 +654,13 @@
   }
 &lt;/style&gt;
 
-&lt;form-repeatable class="custom"&gt;
+<mark>&lt;form-repeatable class="custom"&gt;</mark>
   &lt;div&gt;
     &lt;label for="task-1"&gt;Task 1&lt;/label&gt;
     &lt;input id="task-1" type="text"
            name="tasks[]"&gt;
   &lt;/div&gt;
-&lt;/form-repeatable&gt;</code></pre>
+<mark>&lt;/form-repeatable&gt;</mark></code></pre>
 						<div class="demo">
 							<form id="styled-form">
 								<fieldset>
@@ -715,7 +715,7 @@
   &lt;!-- Repeatable fields via component --&gt;
   &lt;fieldset&gt;
     &lt;legend&gt;Attendees&lt;/legend&gt;
-    &lt;form-repeatable min="1" max="10"&gt;
+    <mark>&lt;form-repeatable min="1" max="10"&gt;</mark>
       &lt;div&gt;
         &lt;label for="attendee-1"&gt;Attendee 1&lt;/label&gt;
         &lt;input id="attendee-1" type="text"
@@ -726,7 +726,7 @@
                name="emails[]"
                placeholder="email@example.com"&gt;
       &lt;/div&gt;
-    &lt;/form-repeatable&gt;
+    <mark>&lt;/form-repeatable&gt;</mark>
   &lt;/fieldset&gt;
 
   &lt;button type="submit"&gt;Register&lt;/button&gt;
