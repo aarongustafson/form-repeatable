@@ -544,6 +544,10 @@ for (const name of ['index.html', 'esm.html', 'unpkg.html']) {
 				colorScheme: 'dark',
 				viewport: { width: 320, height: 900 },
 			});
+			await context.route(
+				'https://cdn.jsdelivr.net/npm/microlighter@2.2.0/dist/**',
+				(route) => route.abort(),
+			);
 			const page = await context.newPage();
 			try {
 				if (failure === 'module failure')
