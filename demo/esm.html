@@ -4,17 +4,42 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>form-repeatable via esm.sh</title>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/microlighter@2.2.0/dist/themes/github.css"
+		/>
 		<link rel="stylesheet" href="./styles.css" />
+		<link rel="stylesheet" href="./demo-shell.css" />
 	</head>
-	<body>
+	<body data-syntax-theme="github">
+		<a class="skip-link" href="#main">Skip to examples</a>
 		<header>
-			<h1>&lt;form-repeatable&gt; via esm.sh</h1>
-			<p>
+			<p class="eyebrow">Web component / esm</p>
+			<h1>&lt;form-repeatable&gt;</h1>
+			<p class="lede">
 				Import the class and register it manually. See the
 				<a href="../">README</a> for the full API.
 			</p>
+			<nav aria-label="Component resources">
+				<a
+					href="https://github.com/aarongustafson/form-repeatable/blob/main/README.md"
+					>Read the README</a
+				>
+				<a href="https://github.com/aarongustafson/form-repeatable"
+					>View on GitHub</a
+				>
+				<a href="./index.html">All examples</a>
+				<a href="./unpkg.html">unpkg example</a>
+			</nav>
 		</header>
-		<main>
+		<main id="main" tabindex="-1">
+			<p
+				id="microlighter-status"
+				class="enhancement-status"
+				role="status"
+				hidden
+			></p>
+
 			<section class="demo-section">
 				<h2>A contact’s email addresses</h2>
 				<p>
@@ -25,7 +50,16 @@
 					usable; dynamic controls require enhancement.
 				</p>
 				<div class="code-demo-pair">
-					<pre><code>&lt;form&gt;
+					<micro-lighter
+						class="code-panel"
+						language="html"
+						controls="copy"
+						data-label="HTML"
+					>
+						<pre
+							aria-label="A contact’s email addresses code 1"
+							tabindex="0"
+						><code>&lt;form&gt;
   <mark>&lt;form-repeatable&gt;</mark>
     &lt;div&gt;
       &lt;label for="email-1"&gt;Email 1&lt;/label&gt;
@@ -41,6 +75,7 @@
     customElements.define('form-repeatable', FormRepeatableElement);
   }</mark>
 &lt;/script&gt;</code></pre>
+					</micro-lighter>
 					<div class="demo">
 						<form>
 							<form-repeatable>
@@ -72,5 +107,6 @@
 				customElements.define('form-repeatable', FormRepeatableElement);
 			}
 		</script>
+		<script type="module" src="./code-examples.js"></script>
 	</body>
 </html>

@@ -1,6 +1,13 @@
 import { readFile } from 'node:fs/promises';
 import { test, expect } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+	await page.route(
+		'https://cdn.jsdelivr.net/npm/microlighter@2.2.0/dist/**',
+		(route) => route.abort(),
+	);
+});
+
 const source = await readFile(
 	new URL('../../form-repeatable.js', import.meta.url),
 	'utf8',
@@ -323,7 +330,8 @@ for (const scheme of ['light', 'dark']) {
 			exact: true,
 		});
 		await input.focus();
-		await expect(input).toHaveCSS('outline-style', 'auto');
+		await expect(input).toHaveCSS('outline-style', 'solid');
+		await expect(input).toHaveCSS('outline-width', '3px');
 		await page.keyboard.press(
 			browserName === 'webkit' && process.platform === 'darwin'
 				? 'Alt+Tab'
@@ -334,7 +342,8 @@ for (const scheme of ['light', 'dark']) {
 			exact: true,
 		});
 		await expect(add).toBeFocused();
-		await expect(add).toHaveCSS('outline-style', 'auto');
+		await expect(add).toHaveCSS('outline-style', 'solid');
+		await expect(add).toHaveCSS('outline-width', '3px');
 		await expect(add).toHaveCSS('opacity', '1');
 		await page.keyboard.press('Space');
 		await expect(host.getByRole('textbox')).toHaveCount(2);
@@ -458,7 +467,8 @@ test('forced colors retain automatic adjustment, names, native focus and usable 
 	for (const button of await host.getByRole('button').all()) {
 		await button.focus();
 		await expect(button).toHaveCSS('forced-color-adjust', 'auto');
-		await expect(button).toHaveCSS('outline-style', 'auto');
+		await expect(button).toHaveCSS('outline-style', 'solid');
+		await expect(button).toHaveCSS('outline-width', '3px');
 		await expect(button).toHaveCSS('opacity', '1');
 		expect((await measurements(button)).text).toBeGreaterThanOrEqual(4.5);
 		expect((await measurements(button)).boundary).toBeGreaterThanOrEqual(3);
@@ -507,7 +517,9 @@ for (const name of ['index.html', 'esm.html', 'unpkg.html']) {
 			const pairs = page.locator('.code-demo-pair');
 			expect(await pairs.count()).toBeGreaterThan(0);
 			for (const pair of await pairs.all()) {
-				const code = await pair.locator(':scope > pre').boundingBox();
+				const code = await pair
+					.locator(':scope > micro-lighter')
+					.boundingBox();
 				const live = await pair.locator('.demo').boundingBox();
 				if (width >= 768)
 					expect(code.x + code.width).toBeLessThanOrEqual(live.x + 1);
