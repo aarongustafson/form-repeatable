@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>&lt;form-repeatable&gt; Web Component Demo</title>
 		<link rel="stylesheet" href="./styles.css" />
+		<link rel="stylesheet" href="./demo-shell.css" />
 		<style>
 			::part(button) {
 				padding: 0.3rem 0.5rem;
@@ -17,7 +18,7 @@
 				background-color: Field;
 				color: FieldText;
 				border-radius: 4px;
-				font-family: monospace;
+				font-family: system-monospace, monospace;
 				font-size: 0.875rem;
 				max-height: 300px;
 				overflow-y: auto;
@@ -77,10 +78,12 @@
 			}
 		</style>
 	</head>
-	<body>
+	<body data-syntax-theme="github">
+		<a class="skip-link" href="#main">Skip to examples</a>
 		<header>
+			<p class="eyebrow">Web component / Examples</p>
 			<h1>&lt;form-repeatable&gt;</h1>
-			<p>
+			<p class="lede">
 				A web component that enables you to control the duplication of
 				fields with native form participation using ElementInternals.
 				Single-instance architecture manages all groups internally. See
@@ -88,9 +91,27 @@
 				<a href="../">README</a>
 				for installation and API documentation.
 			</p>
+			<nav aria-label="Component resources">
+				<a
+					href="https://github.com/aarongustafson/form-repeatable/blob/main/README.md"
+					>Read the README</a
+				>
+				<a href="https://github.com/aarongustafson/form-repeatable"
+					>View on GitHub</a
+				>
+				<a href="./esm.html">esm.sh example</a>
+				<a href="./unpkg.html">unpkg example</a>
+			</nav>
 		</header>
 
-		<main>
+		<main id="main" tabindex="-1">
+			<p
+				id="microlighter-status"
+				class="enhancement-status"
+				role="status"
+				hidden
+			></p>
+
 			<p>
 				Use the labeled fields and Add/Remove text buttons. Without
 				JavaScript or after a module-loading failure, authored initial
@@ -114,7 +135,16 @@
 						manages all groups internally in its shadow DOM.
 					</p>
 					<div class="code-demo-pair">
-						<pre><code>&lt;form&gt;
+						<micro-lighter
+							class="code-panel"
+							language="html"
+							controls="copy"
+							data-label="HTML"
+						>
+							<pre
+								aria-label="Travel Stops code 1"
+								tabindex="0"
+							><code>&lt;form&gt;
   <mark>&lt;form-repeatable&gt;</mark>
     &lt;div&gt;
       &lt;label for="stop-1"&gt;Stop 1&lt;/label&gt;
@@ -124,6 +154,7 @@
     &lt;/div&gt;
   <mark>&lt;/form-repeatable&gt;</mark>
 &lt;/form&gt;</code></pre>
+						</micro-lighter>
 						<div class="demo">
 							<form id="basic-form">
 								<fieldset>
@@ -161,7 +192,16 @@
 						recognizes them all and allows adding/removing.
 					</p>
 					<div class="code-demo-pair">
-						<pre><code><mark>&lt;form-repeatable&gt;</mark>
+						<micro-lighter
+							class="code-panel"
+							language="html"
+							controls="copy"
+							data-label="HTML"
+						>
+							<pre
+								aria-label="Contact Information code 2"
+								tabindex="0"
+							><code><mark>&lt;form-repeatable&gt;</mark>
   &lt;div&gt;
     &lt;label for="phone-1"&gt;Phone 1&lt;/label&gt;
     &lt;input id="phone-1" type="tel"
@@ -181,6 +221,7 @@
            value="555-0102"&gt;
   &lt;/div&gt;
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
+						</micro-lighter>
 						<div class="demo">
 							<form id="prepopulated-form">
 								<fieldset>
@@ -237,7 +278,16 @@
 						button hidden at maximum.
 					</p>
 					<div class="code-demo-pair">
-						<pre><code><mark>&lt;form-repeatable min="2" max="5"&gt;</mark>
+						<micro-lighter
+							class="code-panel"
+							language="html"
+							controls="copy"
+							data-label="HTML"
+						>
+							<pre
+								aria-label="Team Members (2-5 allowed) code 3"
+								tabindex="0"
+							><code><mark>&lt;form-repeatable min="2" max="5"&gt;</mark>
   &lt;div&gt;
     &lt;label for="member-1"&gt;Member 1&lt;/label&gt;
     &lt;input id="member-1" type="text"
@@ -249,6 +299,7 @@
            name="members[]"&gt;
   &lt;/div&gt;
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
+						</micro-lighter>
 						<div class="demo">
 							<form id="minmax-form">
 								<fieldset>
@@ -301,7 +352,16 @@
 						for numbers.
 					</p>
 					<div class="code-demo-pair">
-						<pre><code><mark>&lt;form-repeatable&gt;</mark>
+						<micro-lighter
+							class="code-panel"
+							language="html"
+							controls="copy"
+							data-label="HTML"
+						>
+							<pre
+								aria-label="Email Addresses code 4"
+								tabindex="0"
+							><code><mark>&lt;form-repeatable&gt;</mark>
   <mark>&lt;template&gt;</mark>
     &lt;div&gt;
       &lt;label for="email-<mark>{n}</mark>"&gt;Email <mark>{n}</mark>&lt;/label&gt;
@@ -312,6 +372,7 @@
     &lt;/div&gt;
   <mark>&lt;/template&gt;</mark>
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
+						</micro-lighter>
 						<div class="demo">
 							<form id="template-form">
 								<fieldset>
@@ -351,7 +412,16 @@
 					<h3>Guest Information</h3>
 					<p>Add guests with name and dietary requirements.</p>
 					<div class="code-demo-pair">
-						<pre><code><mark>&lt;form-repeatable&gt;</mark>
+						<micro-lighter
+							class="code-panel"
+							language="html"
+							controls="copy"
+							data-label="HTML"
+						>
+							<pre
+								aria-label="Guest Information code 5"
+								tabindex="0"
+							><code><mark>&lt;form-repeatable&gt;</mark>
   &lt;fieldset&gt;
     &lt;legend&gt;Guest 1&lt;/legend&gt;
     &lt;label for="guest-1"&gt;Name 1&lt;/label&gt;
@@ -367,6 +437,7 @@
     &lt;/select&gt;
   &lt;/fieldset&gt;
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
+						</micro-lighter>
 						<div class="demo">
 							<form id="multiple-form">
 								<fieldset>
@@ -417,7 +488,16 @@
 					<h3>Shopping List</h3>
 					<p>Using custom button labels.</p>
 					<div class="code-demo-pair">
-						<pre><code><mark>&lt;form-repeatable
+						<micro-lighter
+							class="code-panel"
+							language="html"
+							controls="copy"
+							data-label="HTML"
+						>
+							<pre
+								aria-label="Shopping List code 6"
+								tabindex="0"
+							><code><mark>&lt;form-repeatable
   add-label="Add Item"
   remove-label="Delete Item"&gt;</mark>
   &lt;div&gt;
@@ -426,6 +506,7 @@
            name="items[]"&gt;
   &lt;/div&gt;
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
+						</micro-lighter>
 						<div class="demo">
 							<form id="custom-labels-form">
 								<fieldset>
@@ -463,7 +544,16 @@
 					<h3>Education History</h3>
 					<p>Using a fieldset as the repeating container.</p>
 					<div class="code-demo-pair">
-						<pre><code><mark>&lt;form-repeatable&gt;</mark>
+						<micro-lighter
+							class="code-panel"
+							language="html"
+							controls="copy"
+							data-label="HTML"
+						>
+							<pre
+								aria-label="Education History code 7"
+								tabindex="0"
+							><code><mark>&lt;form-repeatable&gt;</mark>
   <mark>&lt;fieldset&gt;</mark>
     &lt;legend&gt;School 1&lt;/legend&gt;
     &lt;label for="school-1"&gt;Institution 1&lt;/label&gt;
@@ -482,6 +572,7 @@
               name="notes[]"&gt;&lt;/textarea&gt;
   <mark>&lt;/fieldset&gt;</mark>
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
+						</micro-lighter>
 						<div class="demo">
 							<form id="input-types-form">
 								<fieldset>
@@ -551,7 +642,16 @@
 						count details.
 					</p>
 					<div class="code-demo-pair">
-						<pre><code><mark>&lt;form-repeatable id="event-repeatable"&gt;</mark>
+						<micro-lighter
+							class="code-panel"
+							language="html"
+							controls="copy"
+							data-label="HTML"
+						>
+							<pre
+								aria-label="Event Logging code 8"
+								tabindex="0"
+							><code><mark>&lt;form-repeatable id="event-repeatable"&gt;</mark>
   &lt;div&gt;
     &lt;label for="ingredient-1"&gt;
       Ingredient 1
@@ -576,6 +676,7 @@
     console.log('Removed:', e.detail.groupCount);
   <mark>});</mark>
 &lt;/script&gt;</code></pre>
+						</micro-lighter>
 						<div class="demo">
 							<form id="events-form">
 								<fieldset>
@@ -620,7 +721,16 @@
 						labels and native focus; color is supplementary.
 					</p>
 					<div class="code-demo-pair">
-						<pre><code>&lt;style&gt;
+						<micro-lighter
+							class="code-panel"
+							language="html"
+							controls="copy"
+							data-label="HTML"
+						>
+							<pre
+								aria-label="Styled Buttons code 9"
+								tabindex="0"
+							><code>&lt;style&gt;
   form-repeatable.custom<mark>::part(button)</mark> {
     border: 1px solid currentColor;
     padding: 0.5rem 1rem;
@@ -661,6 +771,7 @@
            name="tasks[]"&gt;
   &lt;/div&gt;
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
+						</micro-lighter>
 						<div class="demo">
 							<form id="styled-form">
 								<fieldset>
@@ -702,7 +813,16 @@
 						repeatable groups.
 					</p>
 					<div class="code-demo-pair">
-						<pre><code>&lt;form id="combined-form"&gt;
+						<micro-lighter
+							class="code-panel"
+							language="html"
+							controls="copy"
+							data-label="HTML"
+						>
+							<pre
+								aria-label="Event Registration Form code 10"
+								tabindex="0"
+							><code>&lt;form id="combined-form"&gt;
   &lt;!-- Regular form fields --&gt;
   &lt;label for="event-name"&gt;Event Name&lt;/label&gt;
   &lt;input id="event-name" name="eventName"
@@ -731,6 +851,7 @@
 
   &lt;button type="submit"&gt;Register&lt;/button&gt;
 &lt;/form&gt;</code></pre>
+						</micro-lighter>
 						<div class="demo">
 							<form id="combined-form">
 								<label for="event-name">Event Name</label>
@@ -1041,5 +1162,6 @@
 				console.log('Group removed:', e.detail);
 			});
 		</script>
+		<script type="module" src="./code-examples.js"></script>
 	</body>
 </html>
