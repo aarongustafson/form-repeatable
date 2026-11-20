@@ -4,81 +4,14 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>&lt;form-repeatable&gt; Web Component Demo</title>
-		<link rel="stylesheet" href="./styles.css" />
 		<link rel="stylesheet" href="./demo-shell.css" />
-		<style>
-			::part(button) {
-				padding: 0.3rem 0.5rem;
-				margin-block: 0;
-			}
-
-			.output {
-				margin-top: 1rem;
-				padding: 1rem;
-				background-color: Field;
-				color: FieldText;
-				border-radius: 4px;
-				font-family: system-monospace, monospace;
-				font-size: 0.875rem;
-				max-height: 300px;
-				overflow-y: auto;
-			}
-
-			.output h4 {
-				margin-top: 0;
-				font-family:
-					-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-					sans-serif;
-			}
-
-			.output pre {
-				margin: 0;
-				white-space: pre-wrap;
-			}
-
-			form-repeatable.custom::part(button) {
-				border: 1px solid currentColor;
-				padding: 0.5rem 1rem;
-				border-radius: 4px;
-			}
-
-			form-repeatable.custom::part(add-button) {
-				background: #17652e;
-				color: #fff;
-			}
-
-			form-repeatable.custom::part(add-button):hover {
-				background: #114b22;
-			}
-
-			form-repeatable.custom::part(remove-button) {
-				background: #982b39;
-				color: #fff;
-			}
-
-			form-repeatable.custom::part(remove-button):hover {
-				background: #761f2c;
-			}
-
-			form-repeatable.custom::part(group) {
-				padding: 1rem;
-				background: Canvas;
-				color: CanvasText;
-				border-radius: 4px;
-				margin-bottom: 0.5rem;
-			}
-
-			.info-box {
-				margin-top: 2rem;
-				padding: 1.5rem;
-				background-color: ButtonFace;
-				color: ButtonText;
-				border-left: 4px solid ButtonBorder;
-				border-radius: 4px;
-			}
-		</style>
+		<link rel="stylesheet" href="./styles.css" />
 	</head>
-	<body data-syntax-theme="github">
+	<body
+		data-demo-page="full"
+		data-repeatable-showcase
+		data-syntax-theme="github"
+	>
 		<a class="skip-link" href="#main">Skip to examples</a>
 		<header>
 			<p class="eyebrow">Web component / Examples</p>
@@ -109,6 +42,9 @@
 				id="microlighter-status"
 				class="enhancement-status"
 				role="status"
+				data-loading-message="Loading optional code highlighting and Copy controls."
+				data-failure-message="MicroLighter could not load. Code remains readable and selectable; the component loads independently."
+				data-theme-failure-message="Code highlighting and Copy controls are available, but the syntax theme could not load. The component loads independently."
 				hidden
 			></p>
 
@@ -155,7 +91,7 @@
   <mark>&lt;/form-repeatable&gt;</mark>
 &lt;/form&gt;</code></pre>
 						</micro-lighter>
-						<div class="demo">
+						<div class="demo" data-demo-label="Live example">
 							<form id="basic-form">
 								<fieldset>
 									<legend>Trip Information</legend>
@@ -222,7 +158,7 @@
   &lt;/div&gt;
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
 						</micro-lighter>
-						<div class="demo">
+						<div class="demo" data-demo-label="Live example">
 							<form id="prepopulated-form">
 								<fieldset>
 									<legend>Phone Numbers</legend>
@@ -300,7 +236,7 @@
   &lt;/div&gt;
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
 						</micro-lighter>
-						<div class="demo">
+						<div class="demo" data-demo-label="Live example">
 							<form id="minmax-form">
 								<fieldset>
 									<legend>Project Team</legend>
@@ -373,7 +309,7 @@
   <mark>&lt;/template&gt;</mark>
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
 						</micro-lighter>
-						<div class="demo">
+						<div class="demo" data-demo-label="Live example">
 							<form id="template-form">
 								<fieldset>
 									<legend>Contact Emails</legend>
@@ -438,7 +374,7 @@
   &lt;/fieldset&gt;
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
 						</micro-lighter>
-						<div class="demo">
+						<div class="demo" data-demo-label="Live example">
 							<form id="multiple-form">
 								<fieldset>
 									<legend>Event Guests</legend>
@@ -507,7 +443,7 @@
   &lt;/div&gt;
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
 						</micro-lighter>
-						<div class="demo">
+						<div class="demo" data-demo-label="Live example">
 							<form id="custom-labels-form">
 								<fieldset>
 									<legend>Items</legend>
@@ -573,7 +509,7 @@
   <mark>&lt;/fieldset&gt;</mark>
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
 						</micro-lighter>
-						<div class="demo">
+						<div class="demo" data-demo-label="Live example">
 							<form id="input-types-form">
 								<fieldset>
 									<legend>Schools Attended</legend>
@@ -677,7 +613,7 @@
   <mark>});</mark>
 &lt;/script&gt;</code></pre>
 						</micro-lighter>
-						<div class="demo">
+						<div class="demo" data-demo-label="Live example">
 							<form id="events-form">
 								<fieldset>
 									<legend>Ingredients</legend>
@@ -772,7 +708,7 @@
   &lt;/div&gt;
 <mark>&lt;/form-repeatable&gt;</mark></code></pre>
 						</micro-lighter>
-						<div class="demo">
+						<div class="demo" data-demo-label="Live example">
 							<form id="styled-form">
 								<fieldset>
 									<legend>Styled Example</legend>
@@ -852,7 +788,7 @@
   &lt;button type="submit"&gt;Register&lt;/button&gt;
 &lt;/form&gt;</code></pre>
 						</micro-lighter>
-						<div class="demo">
+						<div class="demo" data-demo-label="Live example">
 							<form id="combined-form">
 								<label for="event-name">Event Name</label>
 								<input

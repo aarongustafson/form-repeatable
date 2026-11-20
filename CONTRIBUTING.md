@@ -1,5 +1,7 @@
 # Contributing to form-repeatable
 
+Read the [demo editing guide](demo/README.md) before changing demo assets or tests.
+
 Thank you for your interest in contributing! This document provides guidelines for contributing to this project.
 
 ## Code of Conduct
