@@ -4,6 +4,13 @@ import { FormRepeatableElement } from '../form-repeatable.js';
 
 const read = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
 
+it('trims block-edge margins inside demo sections', () => {
+	const styles = read('../demo/demo-shell.css');
+	expect(styles).toMatch(
+		/\.demo-section(?:,\s*\.api-reference)?\s*\{[^}]*\bmargin-trim:\s*block;/,
+	);
+});
+
 it('publishes the documented attributes, CSS parts, events and registration helper', () => {
 	const manifest = JSON.parse(read('../custom-elements.json'));
 	expect(manifest.readme).toBe('README.md');
