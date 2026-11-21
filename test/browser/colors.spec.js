@@ -66,7 +66,9 @@ function substitute(css, palette) {
 
 async function measurements(locator) {
 	return locator.evaluate((element) => {
-		const context = document.createElement('canvas').getContext('2d');
+		const canvas = document.createElement('canvas');
+		canvas.width = canvas.height = 1;
+		const context = canvas.getContext('2d', { willReadFrequently: true });
 		if (!context) throw new Error('Canvas measurement unavailable.');
 		const pixel = () => [...context.getImageData(0, 0, 1, 1).data];
 		const paint = (color) => {
@@ -524,11 +526,14 @@ for (const name of ['index.html', 'esm.html', 'unpkg.html']) {
 					.toBe(true);
 			}
 
-			expect(
-				await page.evaluate(
-					() => document.documentElement.scrollWidth <= innerWidth,
-				),
-			).toBe(true);
+			await expect
+				.poll(() =>
+					page.evaluate(
+						() =>
+							document.documentElement.scrollWidth <= innerWidth,
+					),
+				)
+				.toBe(true);
 		}
 	});
 	for (const failure of ['no JavaScript', 'module failure']) {
