@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import { test, expect } from '@playwright/test';
+import { expectNativeFocus, readDemoStyles } from './demo-fixture.js';
 
 test.beforeEach(async ({ page }) => {
 	await page.route(
@@ -12,17 +13,7 @@ const source = await readFile(
 	new URL('../../form-repeatable.js', import.meta.url),
 	'utf8',
 );
-const demoCSS = (
-	await Promise.all(
-		['styles.css', 'demo-shell.css'].map((file) =>
-			readFile(new URL(`../../demo/${file}`, import.meta.url), 'utf8'),
-		),
-	)
-).join('\n');
-const demoSource = await readFile(
-	new URL('../../demo/index.html', import.meta.url),
-	'utf8',
-);
+const demoCSS = await readDemoStyles('index.html');
 const definitionSource = await readFile(
 	new URL('../../define.js', import.meta.url),
 	'utf8',
@@ -75,7 +66,9 @@ function substitute(css, palette) {
 
 async function measurements(locator) {
 	return locator.evaluate((element) => {
-		const context = document.createElement('canvas').getContext('2d');
+		const canvas = document.createElement('canvas');
+		canvas.width = canvas.height = 1;
+		const context = canvas.getContext('2d', { willReadFrequently: true });
 		if (!context) throw new Error('Canvas measurement unavailable.');
 		const pixel = () => [...context.getImageData(0, 0, 1, 1).data];
 		const paint = (color) => {
@@ -185,9 +178,12 @@ for (const example of ['live', 'copyable', 'README']) {
 								})
 								.textContent()
 						).match(/<style>([\s\S]*?)<\/style>/)[1];
-			await page.locator('head > style').evaluate((style, css) => {
-				style.textContent = css;
-			}, css);
+			await page.addStyleTag({
+				content: css.replace(
+					/form-repeatable\.custom/g,
+					'body[data-repeatable-showcase] form-repeatable.custom',
+				),
+			});
 		}
 		const add = host.getByRole('button', {
 			name: 'Add Another',
@@ -232,12 +228,9 @@ test('all 19 palettes preserve page, adopted styles, controls and status contras
 				[...sheet.cssRules].map((rule) => rule.cssText).join('\n'),
 			),
 		);
-	const inlineCSS = [...demoSource.matchAll(/<style>([\s\S]*?)<\/style>/g)]
-		.map((match) => match[1])
-		.join('\n');
 	for (const [index, palette] of palettes.entries()) {
 		const style = await page.addStyleTag({
-			content: substitute(demoCSS + inlineCSS, palette),
+			content: substitute(demoCSS, palette),
 		});
 		await hosts.evaluateAll(
 			(elements, css) => {
@@ -332,9 +325,7 @@ for (const scheme of ['light', 'dark']) {
 			name: 'Stop 1',
 			exact: true,
 		});
-		await input.focus();
-		await expect(input).toHaveCSS('outline-style', 'solid');
-		await expect(input).toHaveCSS('outline-width', '3px');
+		await expectNativeFocus(input);
 		await page.keyboard.press(
 			browserName === 'webkit' && process.platform === 'darwin'
 				? 'Alt+Tab'
@@ -345,8 +336,7 @@ for (const scheme of ['light', 'dark']) {
 			exact: true,
 		});
 		await expect(add).toBeFocused();
-		await expect(add).toHaveCSS('outline-style', 'solid');
-		await expect(add).toHaveCSS('outline-width', '3px');
+		await expectNativeFocus(add);
 		await expect(add).toHaveCSS('opacity', '1');
 		await page.keyboard.press('Space');
 		await expect(host.getByRole('textbox')).toHaveCount(2);
@@ -470,8 +460,7 @@ test('forced colors retain automatic adjustment, names, native focus and usable 
 	for (const button of await host.getByRole('button').all()) {
 		await button.focus();
 		await expect(button).toHaveCSS('forced-color-adjust', 'auto');
-		await expect(button).toHaveCSS('outline-style', 'solid');
-		await expect(button).toHaveCSS('outline-width', '3px');
+		await expectNativeFocus(button);
 		await expect(button).toHaveCSS('opacity', '1');
 		expect((await measurements(button)).text).toBeGreaterThanOrEqual(4.5);
 		expect((await measurements(button)).boundary).toBeGreaterThanOrEqual(3);
@@ -520,22 +509,31 @@ for (const name of ['index.html', 'esm.html', 'unpkg.html']) {
 			const pairs = page.locator('.code-demo-pair');
 			expect(await pairs.count()).toBeGreaterThan(0);
 			for (const pair of await pairs.all()) {
-				const code = await pair
-					.locator(':scope > micro-lighter')
-					.boundingBox();
-				const live = await pair.locator('.demo').boundingBox();
-				if (width >= 768)
-					expect(code.x + code.width).toBeLessThanOrEqual(live.x + 1);
-				else
-					expect(code.y + code.height).toBeLessThanOrEqual(
-						live.y + 1,
-					);
+				await expect
+					.poll(() =>
+						pair.evaluate((element) => {
+							const code = element
+								.querySelector(':scope > micro-lighter')
+								.getBoundingClientRect();
+							const live = element
+								.querySelector(':scope > .demo')
+								.getBoundingClientRect();
+							return innerWidth >= 768
+								? code.right <= live.x + 1
+								: code.bottom <= live.y + 1;
+						}),
+					)
+					.toBe(true);
 			}
-			expect(
-				await page.evaluate(
-					() => document.documentElement.scrollWidth <= innerWidth,
-				),
-			).toBe(true);
+
+			await expect
+				.poll(() =>
+					page.evaluate(
+						() =>
+							document.documentElement.scrollWidth <= innerWidth,
+					),
+				)
+				.toBe(true);
 		}
 	});
 	for (const failure of ['no JavaScript', 'module failure']) {
@@ -582,3 +580,38 @@ for (const name of ['index.html', 'esm.html', 'unpkg.html']) {
 		});
 	}
 }
+
+test.describe('demo header spacing', () => {
+	test.use({ javaScriptEnabled: false });
+
+	for (const file of ['index.html', 'esm.html', 'unpkg.html']) {
+		test(`${file}: content clears the header border without JavaScript`, async ({
+			page,
+		}) => {
+			await page.goto(`/demo/${file}`);
+			for (const width of [320, 1400]) {
+				await page.setViewportSize({ width, height: 900 });
+				const gap = await page.locator('main').evaluate((main) => {
+					const header = document.querySelector('body > header');
+					const walker = document.createTreeWalker(
+						main,
+						NodeFilter.SHOW_TEXT,
+					);
+					let text;
+					while ((text = walker.nextNode())) {
+						if (!text.textContent.trim()) continue;
+						const range = document.createRange();
+						range.selectNodeContents(text);
+						const rect = range.getBoundingClientRect();
+						if (rect.width && rect.height)
+							return (
+								rect.top - header.getBoundingClientRect().bottom
+							);
+					}
+					throw new Error('Demo has no visible main content.');
+				});
+				expect(gap, `${file} at ${width}px`).toBeGreaterThanOrEqual(32);
+			}
+		});
+	}
+});
