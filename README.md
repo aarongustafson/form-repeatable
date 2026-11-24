@@ -239,6 +239,10 @@ The component exposes CSS parts that allow you to style internal shadow DOM elem
 
 ### Example Styling
 
+The demos place Remove below the fields when the live example is narrow,
+even when it sits beside a code panel in a wide window. Their
+`demo/styles.css` uses a container query on `.demo` for that layout.
+
 ```css
 /* Style all buttons */
 form-repeatable::part(button) {

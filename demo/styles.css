@@ -29,7 +29,11 @@ form-repeatable::part(button):hover {
 	}
 }
 
-@media (max-width: 600px) {
+.demo {
+	container-type: inline-size;
+}
+
+@container (max-width: 600px) {
 	form-repeatable::part(groups) {
 		grid-template-columns: minmax(0, 1fr);
 	}

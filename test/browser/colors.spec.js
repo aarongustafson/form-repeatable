@@ -495,6 +495,33 @@ test('narrow custom groups give fields usable width and place Remove below them'
 	}
 });
 
+test('email groups reflow within a narrow live panel on a wide viewport', async ({
+	page,
+}) => {
+	await page.setViewportSize({ width: 768, height: 900 });
+	await demo(page, 'esm.html');
+	const host = page.locator('form-repeatable');
+	await host
+		.getByRole('button', { name: 'Add Another', exact: true })
+		.click();
+	await host.getByRole('textbox').evaluateAll((fields) => {
+		for (const field of fields) field.setAttribute('size', '40');
+	});
+	const panel = await page.locator('.demo').boundingBox();
+	for (const group of await host.locator('[part="group"]').all()) {
+		const field = await group.getByRole('textbox').boundingBox();
+		const remove = await group.getByRole('button').boundingBox();
+		expect(field.width).toBeGreaterThanOrEqual(120);
+		expect(field.x + field.width).toBeLessThanOrEqual(
+			panel.x + panel.width,
+		);
+		expect(remove.y).toBeGreaterThanOrEqual(field.y + field.height);
+		expect(remove.x + remove.width).toBeLessThanOrEqual(
+			panel.x + panel.width,
+		);
+	}
+});
+
 for (const name of ['index.html', 'esm.html', 'unpkg.html']) {
 	test(`${name}: code/live pairs and added groups reflow`, async ({
 		page,
