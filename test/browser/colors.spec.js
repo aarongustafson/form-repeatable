@@ -441,6 +441,109 @@ test('form-data output renders entered markup as literal text', async ({
 	await expect(page.locator('#combined-output pre')).toContainText(value);
 });
 
+test('submission and reset show current values without restoring removed groups', async ({
+	page,
+}) => {
+	await demo(page);
+	const form = page.locator('#combined-form');
+	const host = form.locator('form-repeatable');
+	await form.locator('#event-name').fill('Field trip');
+	await form.locator('#event-date').fill('2026-12-01');
+	await host
+		.getByRole('textbox', { name: 'Attendee 1', exact: true })
+		.fill('Ada');
+	await host
+		.getByRole('button', { name: 'Add Another', exact: true })
+		.click();
+	await host
+		.getByRole('textbox', { name: 'Attendee 2', exact: true })
+		.fill('Grace');
+	await host
+		.getByRole('button', { name: 'Add Another', exact: true })
+		.click();
+	await host
+		.getByRole('textbox', { name: 'Attendee 3', exact: true })
+		.fill('Linus');
+	await host
+		.getByRole('button', { name: 'Remove Attendee 1', exact: true })
+		.click();
+	await form
+		.getByRole('button', { name: 'Register Event', exact: true })
+		.click();
+	await expect(page.locator('#combined-output pre')).toContainText('Grace');
+	await form.getByRole('button', { name: 'Reset form', exact: true }).click();
+	await expect(host.getByRole('textbox', { name: /Attendee/ })).toHaveCount(
+		2,
+	);
+	await expect(
+		host.getByRole('textbox', { name: 'Attendee 1', exact: true }),
+	).toHaveValue('');
+	await expect(page.locator('#combined-output pre')).not.toContainText(
+		'Grace',
+	);
+	expect(
+		await form.evaluate((element) =>
+			new FormData(element).getAll('attendees[]'),
+		),
+	).toEqual(['', '']);
+});
+
+test('translated actions keep contextual names and keyboard focus', async ({
+	page,
+}) => {
+	await demo(page);
+	const example = page.locator('#spanish-labels');
+	const host = example.locator('form-repeatable');
+	const add = host.getByRole('button', {
+		name: 'Añadir parada',
+		exact: true,
+	});
+	await add.focus();
+	await page.keyboard.press('Space');
+	await expect(add).toBeFocused();
+	const remove = host.getByRole('button', {
+		name: 'Quitar Parada 2',
+		exact: true,
+	});
+	await remove.focus();
+	await page.keyboard.press('Enter');
+	await expect(
+		host.getByRole('textbox', { name: 'Parada 1', exact: true }),
+	).toBeVisible();
+	await expect(add).toBeFocused();
+});
+
+for (const [file, fragment] of [
+	['index.html', 'travel-stops'],
+	['index.html', 'education-history'],
+	['index.html', 'spanish-labels'],
+	['esm.html', 'contact-emails'],
+	['unpkg.html', 'limited-emails'],
+]) {
+	test(`${file}#${fragment}: native fragment navigation reaches the example`, async ({
+		browser,
+	}) => {
+		const context = await browser.newContext({ javaScriptEnabled: false });
+		try {
+			const page = await context.newPage();
+			await page.goto(`/demo/${file}#${fragment}`);
+			const example = page.locator(`#${fragment}`);
+			await expect(example).toBeInViewport();
+			await expect(example.locator('h2, h3').first()).toBeVisible();
+			if (fragment === 'spanish-labels') {
+				const field = example.getByRole('textbox', {
+					name: 'Parada 1',
+					exact: true,
+				});
+				await field.fill('Madrid');
+				await expect(field).toHaveValue('Madrid');
+			}
+		} finally {
+			await context.close();
+		}
+	});
+}
+
 test('forced colors retain automatic adjustment, names, native focus and usable controls', async ({
 	page,
 	browserName,
@@ -564,10 +667,14 @@ for (const name of ['index.html', 'esm.html', 'unpkg.html']) {
 				await expect(fields.first()).toHaveAccessibleName(/Stop|Email/);
 				await fields.first().fill('Fallback value');
 				await expect(fields.first()).toHaveValue('Fallback value');
-				if (name === 'index.html')
+				if (name === 'index.html') {
 					await expect(page.locator('#phone-1')).toHaveValue(
 						'555-0100',
 					);
+					await expect(
+						page.locator('#template-form input'),
+					).toHaveCount(0);
+				}
 				expect(
 					await page.evaluate(
 						() =>

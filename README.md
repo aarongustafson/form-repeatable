@@ -6,27 +6,13 @@
 [![License](https://img.shields.io/npm/l/@aarongustafson/form-repeatable)](https://github.com/aarongustafson/form-repeatable/blob/main/LICENSE)
 [![Type definitions](https://img.shields.io/npm/types/@aarongustafson/form-repeatable)](https://github.com/aarongustafson/form-repeatable/blob/main/form-repeatable.d.ts)
 
-A single-instance web component that manages repeatable form field groups internally using shadow DOM and native form participation via the ElementInternals API.
+`<form-repeatable>` adds and removes related form fields as a group. It numbers
+labels and field identifiers, supports minimum and maximum group counts, and
+includes group values in the containing form’s data.
 
-## Features
-
-- 🔄 **Manage repeatable field groups** - single component instance manages all groups
-- 🔢 **Auto-increment** numeric values in labels, IDs, and `for` attributes
-- ❌ **Add and remove groups** dynamically with min/max constraints
-- 📋 **Native form participation** - uses ElementInternals API for seamless form integration
-- 🎨 **Flexible templating** - use first child or explicit `<template>` element
-- 🌍 **Global styles** - automatically adopts page stylesheets into shadow DOM
-- 🎯 **Modern CSS Grid layout** - default 2-column layout with subgrid support
-- 📦 **Zero dependencies** - pure web component
-- **Native controls** - labeled fields and text buttons with contextual Remove names
-- 🎯 **TypeScript-ready** with type definitions
-
-## TypeScript & Framework Support
-
-- Bundled `.d.ts` definitions describe `FormRepeatableElement` and `defineFormRepeatable`, so editors and build pipelines get full typing with zero config.
-- `addLabel`, `removeLabel`, `min`, and `max` now reflect between properties and attributes, keeping declarative templates and reactive frameworks in sync with the DOM.
-- `_upgradeProperty` ensures properties assigned before the browser upgrades the custom element are re-applied once the class is connected (useful for SSR and hydration scenarios).
-- Global `HTMLElementTagNameMap` augmentation lets TypeScript understand `document.querySelector('form-repeatable')` without additional type casts.
+Authored initial fields remain usable without JavaScript. After enhancement,
+the component moves them into a shadow root and adds text buttons. It requires
+form-associated custom element support and has no runtime dependencies.
 
 ## Demo
 
@@ -36,6 +22,12 @@ A single-instance web component that manages repeatable form field groups intern
 
 - [unpkg CDN](https://aarongustafson.github.io/form-repeatable/demo/unpkg.html) ([Source](./demo/unpkg.html))
 - [esm.sh CDN](https://aarongustafson.github.io/form-repeatable/demo/esm.html) ([Source](./demo/esm.html))
+
+The main demo covers [initial values](https://aarongustafson.github.io/form-repeatable/demo/#contact-information),
+[explicit templates](https://aarongustafson.github.io/form-repeatable/demo/#email-template),
+[related fields](https://aarongustafson.github.io/form-repeatable/demo/#education-history),
+[translated labels](https://aarongustafson.github.io/form-repeatable/demo/#spanish-labels),
+and [submission](https://aarongustafson.github.io/form-repeatable/demo/#event-registration).
 
 ## Installation
 
@@ -47,15 +39,16 @@ npm install @aarongustafson/form-repeatable
 
 ### Option 1: Import the class and define manually
 
-Import the class and define the custom element with your preferred tag name:
+The main import exports the class without registering it. Register the tag used
+in the examples below, or choose another name and update your HTML to match:
 
 ```javascript
 import { FormRepeatableElement } from '@aarongustafson/form-repeatable';
 
-customElements.define('my-custom-name', FormRepeatableElement);
+customElements.define('form-repeatable', FormRepeatableElement);
 ```
 
-### Option 2: Auto-define the custom element (browser environments only)
+### Option 2: Register with the definition helper
 
 Use the guarded definition helper to register the element when `customElements` is available:
 
@@ -81,7 +74,7 @@ You can also include the guarded script from HTML:
 ></script>
 ```
 
-### Basic Example
+### Add and remove fields
 
 ```html
 <form>
@@ -94,13 +87,12 @@ You can also include the guarded script from HTML:
 </form>
 ```
 
-The component uses the first child as a template. When the user clicks "Add Another":
+The first child supplies both the initial group and the template for new groups.
+“Add Another” creates Stop 2, with a matching label and field ID. Each group gets
+a Remove button when the count exceeds `min`. Without JavaScript, Stop 1 remains
+an ordinary labeled field.
 
-1. Clones the template
-2. Increments numbers ("Stop 1" → "Stop 2", `stop-1` → `stop-2`)
-3. Appends the new group to the shadow DOM
-4. Shows remove buttons when more than the minimum groups exist
-5. Updates the form value via ElementInternals
+## Initial groups and templates
 
 ### Progressive Enhancement with Pre-populated Groups
 
@@ -125,26 +117,16 @@ You can provide multiple initial groups that will be moved into the shadow DOM:
 </form>
 ```
 
-All child elements become groups managed by the single component instance.
+Each direct child element becomes a group; keep unrelated headings and other
+content outside the component. The component preserves initial field values.
+New groups start from the first group’s authored defaults, not its current edits,
+then apply numbering. Adding a fourth phone here changes the template’s
+`value="555-0100"` to `555-0104`; it doesn’t create a blank field. Use a blank
+explicit template when new groups shouldn’t carry an initial value.
 
-### Multiple Fields per Group
-
-Each group can contain multiple related fields:
-
-```html
-<form-repeatable>
-  <fieldset>
-    <legend>Guest 1</legend>
-    <label for="guest-name-1">Name</label>
-    <input id="guest-name-1" type="text" name="guest-name-1" />
-
-    <label for="guest-email-1">Email</label>
-    <input id="guest-email-1" type="email" name="guest-email-1" />
-  </fieldset>
-</form-repeatable>
-```
-
-All numeric values in labels, IDs, and attributes are incremented when new groups are added.
+Put related fields inside one container, such as a `fieldset` with a `legend`.
+The [guest and education demos](./demo/index.html#related-fields) show inputs,
+selects, and textareas that are added and removed together.
 
 ### Explicit Template with Placeholders
 
@@ -161,13 +143,33 @@ Instead of using the first child as a template, you can provide an explicit `<te
 </form-repeatable>
 ```
 
-The `{n}` placeholders are replaced with sequential numbers (1, 2, 3, etc.).
+The component uses the template’s first element as the new group and replaces
+`{n}` in attributes and label/legend text with the group number. It creates one
+group when there are no authored initial groups. You can combine an explicit
+template with initial groups to give new groups different defaults.
 
 An explicit template is inert without JavaScript. Supply authored initial
 groups instead when the page needs usable fields before enhancement or after a
 module-loading failure.
 
-## Attributes
+### Numbering and field names
+
+Use distinct ID prefixes for each component on a page. Names such as `phones[]`
+stay the same across groups, producing repeated form entries. Numbered names,
+IDs, and label `for` values change when groups are removed and renumbered.
+
+Automatic numbering scans every attribute and label/legend text; it isn’t
+limited to IDs. Its current pattern replaces the last digit it finds, not a
+whole multi-digit number. Avoid unrelated digits in defaults, URLs, and other
+attributes. Explicit `{n}` placeholders give you control when adding groups,
+but removal still uses automatic numbering. Check removal carefully if your
+groups can reach double-digit counts. Renumbering can also change a field’s
+authored default and its current value if the user hasn’t edited it.
+
+An empty template or missing initial group logs an error; Add cannot create a
+group without a usable template.
+
+## Attributes and properties
 
 | Attribute      | Type     | Default         | Description                                                                                                                                                                    |
 | -------------- | -------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -176,28 +178,79 @@ module-loading failure.
 | `min`          | `number` | `1`             | Minimum number of groups (must be > 0). Remove buttons are hidden when at minimum.                                                                                             |
 | `max`          | `number` | `null`          | Maximum number of groups (optional, must be > min). Add button is hidden when at maximum.                                                                                      |
 
-### Example with Min/Max Constraints
+`min` must be a positive integer; invalid values fall back to `1` with a warning.
+Author `max` as an integer greater than `min`; invalid limits are ignored with
+a warning. The attribute parser uses `parseInt`, so some malformed `max` strings
+are truncated rather than rejected. Property setters accept positive integers
+and remove invalid limits.
 
-```html
-<form-repeatable
-  min="2"
-  max="5"
-  add-label="Add Team Member"
-  remove-label="Remove Member"
->
-  <div>
-    <label for="member-1">Team Member 1</label>
-    <input id="member-1" type="text" name="members[]" />
-  </div>
-</form-repeatable>
-```
+Limits control adding and removing, not initial content: `min="2"` doesn’t
+create a second initial group, and `max` doesn’t trim authored groups. Supply the
+starting count you need. See the [limits demo](./demo/index.html#team-members).
 
-This creates a component that:
+| Property      | Reflects       |
+| ------------- | -------------- |
+| `addLabel`    | `add-label`    |
+| `removeLabel` | `remove-label` |
+| `min`         | `min`          |
+| `max`         | `max`          |
 
-- Starts with 1 group (will allow adding until min is met)
-- Cannot have fewer than 2 groups
-- Cannot have more than 5 groups
-- Uses custom button labels
+Properties assigned before upgrade are reapplied when the component connects.
+The package includes TypeScript declarations and an `HTMLElementTagNameMap`
+entry for `form-repeatable`.
+
+## Button vocabulary and translation
+
+Set `add-label` and `remove-label` for your application’s vocabulary or language.
+The component has no shared localization configuration. Translate your field
+labels and legends too: a Remove button’s accessible name combines
+`remove-label` with the first descendant label’s text, or the first legend if
+there’s no label. For example, “Remove Stop 1” identifies the group being deleted.
+If neither exists, its name is only `remove-label`.
+
+Use trusted authored text for these labels and templates; the current runtime
+inserts action labels into generated HTML without escaping them.
+
+## Form values, reset, and disabled state
+
+Before upgrade, native fields participate in the form normally. After upgrade,
+the component collects named descendant `input`, `select`, and `textarea`
+values into `FormData` through
+[`ElementInternals.setFormValue()`](https://developer.mozilla.org/en-US/docs/Web/API/ElementInternals/setFormValue).
+
+- Unnamed and individually disabled fields are omitted.
+- Checked checkboxes and radios contribute their values; unchecked ones don’t.
+- File inputs contribute selected files. A select contributes its `.value`,
+  not every selection in a multiple-select control.
+- Input/change events, adding/removing groups, and attribute changes update
+  the cached form data. If you change field values programmatically, dispatch
+  `input` or `change` to refresh it.
+- The component does **not** forward its fields’ constraint validity to the
+  parent form. Handle validation in your application and on the server;
+  `required` inside the shadow root doesn’t block parent-form submission.
+
+Native form reset resets text inputs and textareas to `defaultValue`, and
+checkboxes/radios to `defaultChecked`. It keeps the current group count; it
+doesn’t restore removed groups. Select restoration isn’t implemented: the
+callback assigns `defaultValue` rather than restoring the selected options.
+File inputs with the usual empty default value clear their selection.
+
+A disabled containing `fieldset` triggers the form-disabled callback, which
+disables current fields and buttons. Re-enabling clears their disabled flags,
+including authored individual disabled states. Controls rebuilt while the
+component is disabled don’t retain that state automatically. Account for these
+limits if your application changes configuration while disabled.
+
+On disconnect, the component removes its shadow-root click, input, and change
+listeners. It doesn’t restore fields to the light DOM. Reconnection initializes
+again and can add a group; don’t assume detach/reattach is a state-preserving
+reset.
+
+## Methods
+
+`FormRepeatableElement.resetGlobalStyles()` clears the page stylesheet snapshot
+for future instances only. It doesn’t refresh existing shadow roots. There are
+no public add/remove methods; use the generated buttons.
 
 ## Events
 
@@ -207,6 +260,11 @@ The component fires custom events that you can listen to:
 | ------------------------- | ------------------------------- | --------------------------------------- |
 | `form-repeatable:added`   | Fired when a new group is added | `{ group: Object, groupCount: number }` |
 | `form-repeatable:removed` | Fired when a group is removed   | `{ group: Object, groupCount: number }` |
+
+Both events bubble and are composed (they cross shadow boundaries). `group`
+contains the group’s `id`, `element`, and `index`; `groupCount` is the current
+count. Creating a group from a template-only component also fires the added
+event during initialization. Listen before registration if you need that event.
 
 ### Example Event Handling
 
@@ -222,7 +280,9 @@ repeatable.addEventListener('form-repeatable:removed', (event) => {
 });
 ```
 
-## CSS Parts
+## Styling
+
+### CSS parts
 
 The component exposes CSS parts that allow you to style internal shadow DOM elements:
 
@@ -285,7 +345,7 @@ form-repeatable::part(groups) {
 }
 ```
 
-## Default Styling
+### Default layout and colors
 
 The component uses a **CSS Grid layout** by default:
 
@@ -306,13 +366,6 @@ color is supplementary.
 Keep the native focus indicator unless you provide an equally visible
 replacement. Do not fade focused or hovered controls with opacity, and leave
 automatic forced-color adjustment enabled.
-
-When controls rebuild, a focused field that remains keeps focus and its value.
-Activating Add keeps focus on its replacement button; at the maximum, focus
-moves to the last Remove button instead. Removing a group focuses the next
-Remove action, or the previous one when deleting the last group. If no Remove
-buttons remain, focus returns to Add. Native focus scrolling keeps the action
-in view.
 
 You can override the grid layout using `::part(groups)` as shown above.
 
@@ -382,49 +435,38 @@ label {
 }
 ```
 
-## Form Participation
+## Labels and focus
 
-This component uses the **ElementInternals API** for native form participation:
+Give every field a visible label, and use a legend for related fields. Include
+the group number in the first label where possible so Remove names distinguish
+groups; the component prefers a label over a legend. Add and Remove are native
+`type="button"` controls. Their disappearance at limits is the count cue; the
+component doesn’t announce count changes through a live region.
 
-- **Automatic submission**: All inputs within groups are collected and submitted with the form
-- **Value synchronization**: Input/change listeners inside the shadow root update FormData as fields change, including non-composed change events. Listeners are removed on disconnect.
-- **FormData integration**: Values are added to FormData automatically
-- **Form reset**: Supports native form reset functionality
-- **Disabled state**: Respects form disabled state
-- **Browser support**: 95% (Chrome 77+, Firefox 93+, Safari 16.4+)
-
-The component is form-associated (`static formAssociated = true`) and manages form values internally using `attachInternals()`.
-
-## How It Works
-
-The component uses a **single-instance architecture**:
-
-1. **Template extraction**: Parses the first child element (or explicit `<template>`) to create a reusable template
-2. **Number detection**: Identifies numeric patterns using regex `/(.*)(\d+)(.*)/` and converts to `{n}` placeholders
-3. **Group initialization**: Moves all light DOM children into shadow DOM as initial groups
-4. **Adding groups**: Clones the template, replaces `{n}` with sequential numbers, appends to shadow DOM
-5. **Removing groups**: Removes the group and renumbers remaining groups sequentially (1, 2, 3...)
-6. **Form value sync**: Collects all inputs from groups and updates FormData via ElementInternals
-7. **Global styles**: Automatically adopts page stylesheets into shadow DOM for consistent styling
+When controls rebuild, a focused field that remains keeps focus and its value.
+Activating Add keeps focus on its replacement button; at the maximum, focus
+moves to the last Remove button instead. Removing a group focuses the Remove
+action at that position, or the previous one when deleting the last group.
+If no Remove buttons remain, focus returns to Add. Native focus scrolling keeps
+the action in view.
 
 ## Browser Support
 
-This component uses modern web standards:
+The runtime requires ES modules, Custom Elements, Shadow DOM, `FormData`, and
+form-associated custom elements with `attachInternals()` and `setFormValue()`.
+If registration fails, authored initial fields remain usable; templates stay
+inert. Generic custom element polyfills alone don’t establish form support.
 
-- Custom Elements v1
-- Shadow DOM v1
-- ElementInternals API
-- Adopted Stylesheets
-- CSS Grid & Subgrid
-- ES Modules
+Page stylesheet copying uses constructed `CSSStyleSheet` objects,
+`replaceSync()`, and `adoptedStyleSheets`. If copying fails, the component skips
+those styles; its controls still need appropriate authored styling.
 
-**Supported browsers:**
-
-- Chrome/Edge 117+ (for subgrid support)
-- Firefox 71+ (for subgrid support)
-- Safari 16.4+ (for ElementInternals support)
-
-For broader browser support without subgrid, you can override the default grid layout using CSS parts. For older browsers, you may need polyfills from [@webcomponents/webcomponentsjs](https://github.com/webcomponents/polyfills/tree/master/packages/webcomponentsjs).
+CSS Grid and `subgrid` provide the default layout, not form participation.
+You can replace the grid through CSS parts without `subgrid`. Test your target
+browsers and layout rather than treating a floating usage percentage as a
+support guarantee. See the [source](./form-repeatable.js),
+[manifest](./custom-elements.json), and [declarations](./form-repeatable.d.ts)
+for implementation and type details.
 
 ## Development
 
